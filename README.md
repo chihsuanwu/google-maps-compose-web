@@ -10,7 +10,26 @@ This library is heavily inspired by [Maps Compose for Android](https://github.co
 
 # Usage
 
-Still in progress.
+Adding a `GoogleMap` to your Compose UI as follows:
+
+```kotlin
+val cameraPositionState = rememberCameraPositionState {
+    position = CameraPosition(
+        center = LatLng(23.2, 120.5),
+        zoom = 8.0,
+    )
+}
+GoogleMap(
+    apiKey = "YOUR_API_KEY",
+    cameraPositionState = cameraPositionState,
+    attrs = {
+        style {
+            width(500.px)
+            height(500.px)
+        }
+    }
+)
+```
 
 # Documentation
 

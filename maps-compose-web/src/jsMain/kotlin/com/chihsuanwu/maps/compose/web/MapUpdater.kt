@@ -3,15 +3,12 @@ package com.chihsuanwu.maps.compose.web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
-import com.chihsuanwu.maps.compose.web.element.GoogleMap
-import com.chihsuanwu.maps.compose.web.element.toLatLng
-import com.chihsuanwu.maps.compose.web.state.CameraPosition
-import com.chihsuanwu.maps.compose.web.state.CameraPositionState
-import com.chihsuanwu.maps.compose.web.state.LatLng
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
+import com.chihsuanwu.maps.compose.web.jsobject.toLatLng
 
 
 internal class MapPropertiesNode(
-    val map: GoogleMap,
+    val map: MapView,
     cameraPositionState: CameraPositionState,
 ) : MapNode {
 

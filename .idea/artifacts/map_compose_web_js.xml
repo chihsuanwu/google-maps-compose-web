@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="map-compose-web-js">
-    <output-path>$PROJECT_DIR$/map-compose-web/build/libs</output-path>
-    <root id="archive" name="map-compose-web-js.jar">
-      <element id="module-output" name="google-maps-compose-web.map-compose-web.jsMain" />
-    </root>
-  </artifact>
-</component>

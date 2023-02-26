@@ -1,7 +1,7 @@
 package com.chihsuanwu.maps.compose.web
 
 import androidx.compose.runtime.AbstractApplier
-import com.chihsuanwu.maps.compose.web.element.GoogleMap
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
 
 internal interface MapNode {
     fun onAttached() {}
@@ -12,7 +12,7 @@ internal interface MapNode {
 private object MapNodeRoot : MapNode
 
 internal class MapApplier(
-    val map: GoogleMap,
+    val map: MapView,
 ): AbstractApplier<MapNode>(MapNodeRoot) {
 
     private val decorations = mutableListOf<MapNode>()

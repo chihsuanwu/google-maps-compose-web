@@ -1,19 +1,19 @@
-package com.chihsuanwu.maps.compose.web.element
+package com.chihsuanwu.maps.compose.web.jsobject
 
-import com.chihsuanwu.maps.compose.web.state.CameraPosition
-import com.chihsuanwu.maps.compose.web.state.LatLng
+import com.chihsuanwu.maps.compose.web.CameraPosition
+import com.chihsuanwu.maps.compose.web.LatLng
 import js.core.jso
 
 /**
  * A LatLng json object. This is used to pass into constructor of
  * [google.maps.LatLng](https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLng)
  */
-external interface LatLngJson {
+internal external interface LatLngJson {
     var lat: Double
     var lng: Double
 }
 
-fun LatLng.toLatLngJson(): LatLngJson {
+internal fun LatLng.toLatLngJson(): LatLngJson {
     return jso {
         lat = this@toLatLngJson.lat
         lng = this@toLatLngJson.lng
@@ -24,12 +24,12 @@ fun LatLng.toLatLngJson(): LatLngJson {
  * A [google.maps.LatLng](https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLng)
  * object.
  */
-external interface JsLatLng {
+internal external interface JsLatLng {
     var lat: () -> Double
     var lng: () -> Double
 }
 
-fun JsLatLng.toLatLng(): LatLng {
+internal fun JsLatLng.toLatLng(): LatLng {
     return LatLng(lat(), lng())
 }
 
@@ -37,14 +37,14 @@ fun JsLatLng.toLatLng(): LatLng {
  * A [google.maps.CameraOptions](https://developers.google.com/maps/documentation/javascript/reference/map#CameraOptions)
  * object.
  */
-external interface CameraOptions {
+internal external interface CameraOptions {
     var center: LatLngJson
     var zoom: Double
     var tilt: Double
     var heading: Double
 }
 
-fun CameraPosition.toCameraOptions(): CameraOptions {
+internal fun CameraPosition.toCameraOptions(): CameraOptions {
     return jso {
         center = this@toCameraOptions.center.toLatLngJson()
         zoom = this@toCameraOptions.zoom

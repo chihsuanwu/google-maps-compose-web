@@ -1,9 +1,8 @@
-package com.chihsuanwu.maps.compose.web.state
+package com.chihsuanwu.maps.compose.web
 
 import androidx.compose.runtime.*
-import com.chihsuanwu.maps.compose.web.element.GoogleMap
-import com.chihsuanwu.maps.compose.web.element.toCameraOptions
-import kotlinx.browser.document
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
+import com.chihsuanwu.maps.compose.web.jsobject.toCameraOptions
 
 
 data class LatLng(
@@ -58,9 +57,9 @@ public class CameraPositionState(
             }
         }
 
-    private var map: GoogleMap? by mutableStateOf(null)
+    private var map: MapView? by mutableStateOf(null)
 
-    internal fun setMap(map: GoogleMap?) {
+    internal fun setMap(map: MapView?) {
         if (this.map == null && map == null) return
         if (this.map != null && map != null) {
             error("CameraPositionState may only be associated with one GoogleMap at a time")

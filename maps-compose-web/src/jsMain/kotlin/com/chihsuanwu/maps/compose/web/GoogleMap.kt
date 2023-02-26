@@ -1,44 +1,57 @@
 package com.chihsuanwu.maps.compose.web
 
 import androidx.compose.runtime.*
-import com.chihsuanwu.maps.compose.web.element.GoogleMap
-import com.chihsuanwu.maps.compose.web.element.googleMap
-import com.chihsuanwu.maps.compose.web.element.toLatLngJson
-import com.chihsuanwu.maps.compose.web.state.CameraPositionState
-import com.chihsuanwu.maps.compose.web.state.rememberCameraPositionState
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
+import com.chihsuanwu.maps.compose.web.jsobject.newMap
+import com.chihsuanwu.maps.compose.web.jsobject.toLatLngJson
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.awaitCancellation
+import org.jetbrains.compose.web.css.height
+import org.jetbrains.compose.web.css.percent
+import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLDivElement
 
+/**
+ * A compose container for a [MapView].
+ *
+ * @param apiKey the API key to use for the map.
+ * @param cameraPositionState the [CameraPositionState] to be used to control or observe the map's
+ * camera state
+ * @param id The id of the element to be used as the map container.
+ * @param attrs The attributes to be applied to the map container.
+ * @param content the content of the map
+ */
 @Composable
 public fun GoogleMap(
+    apiKey: String?,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
     id: String = "map",
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
+    content: @Composable (() -> Unit)? = null,
 ) {
-    var map: GoogleMap? by remember { mutableStateOf(null) }
+    var map: MapView? by remember { mutableStateOf(null) }
 
     LaunchedEffect(Unit) {
         val script = document.createElement("script").apply {
-            this.asDynamic().src = "https://maps.googleapis.com/maps/api/js?callback=initMap"
+            val src = StringBuilder("https://maps.googleapis.com/maps/api/js?")
+            apiKey?.let { src.append("key=$it&") }
+            src.append("callback=initMap")
+            this.asDynamic().src = src
             this.asDynamic().async = true
         }
         document.head?.appendChild(script)
     }
 
     window.asDynamic().initMap = {
-        map = googleMap(
-            id = id,
-            center = cameraPositionState.position.center.toLatLngJson(),
-            zoom = cameraPositionState.position.zoom
-        )
+        map = newMap(id = id)
     }
 
     val currentCameraPositionState by rememberUpdatedState(cameraPositionState)
 
     val parentComposition = rememberCompositionContext()
+    val currentContent by rememberUpdatedState(content)
 
     LaunchedEffect(map) {
         val currentMap = map
@@ -48,14 +61,20 @@ public fun GoogleMap(
                     MapUpdater(
                         cameraPositionState = currentCameraPositionState,
                     )
+                    currentContent?.invoke()
                 }
             }
         }
     }
 
+    // The container for the map
     Div(
         attrs = {
-            id("map")
+            id(id)
+            style {
+                width(100.percent)
+                height(100.percent)
+            }
             attrs?.invoke(this)
         }
     )
@@ -70,7 +89,7 @@ internal suspend inline fun disposingComposition(factory: () -> Composition) {
     }
 }
 
-private inline fun GoogleMap.newComposition(
+private inline fun MapView.newComposition(
     parent: CompositionContext,
     noinline content: @Composable () -> Unit
 ): Composition {
