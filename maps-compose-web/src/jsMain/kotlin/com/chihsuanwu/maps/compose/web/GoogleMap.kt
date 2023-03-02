@@ -28,6 +28,7 @@ public fun GoogleMap(
     apiKey: String?,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
     id: String = "map",
+    extra: String? = null,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
     content: @Composable (() -> Unit)? = null,
 ) {
@@ -36,8 +37,9 @@ public fun GoogleMap(
     LaunchedEffect(Unit) {
         val script = document.createElement("script").apply {
             val src = StringBuilder("https://maps.googleapis.com/maps/api/js?")
-            apiKey?.let { src.append("key=$it&") }
-            src.append("callback=initMap")
+            apiKey?.let { src.append("key=$it") }
+            src.append("&callback=initMap")
+            extra?.let { src.append("&$it") }
             this.asDynamic().src = src
             this.asDynamic().async = true
         }

@@ -4,6 +4,7 @@ import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
+import kotlin.random.Random
 
 fun main() {
     renderComposable(rootElementId = "root") {
@@ -85,53 +86,162 @@ private fun Map(
 ) {
     val cameraPositionState = rememberCameraPositionState  {
         position = CameraPosition(
-            center = LatLng(23.2, 120.5),
-            zoom = 8.0,
+            center = LatLng(23.5, 120.8),
+            zoom = 7.6,
         )
     }
 
-    var polyline by remember {
-        mutableStateOf(
-            listOf(
-                LatLng(23.2, 120.5),
-                LatLng(21.2, 120.2),
-                LatLng(25.5, 122.2),
-                LatLng(23.2, 120.5),
-            )
-        )
+    var polyline: List<LatLng> by remember { mutableStateOf(emptyList()) }
+    var polygon: List<LatLng> by remember { mutableStateOf(emptyList()) }
+    var markers: List<MarkerState> by remember { mutableStateOf(emptyList()) }
+
+    Div(
+        attrs = {
+            style {
+                margin(5.px)
+            }
+        }
+    ) {
+        Span(
+            attrs = {
+                style {
+                    marginRight(10.px)
+                }
+            }
+        ) {
+            Text("Camera Position: ${cameraPositionState.position.center.asString()}")
+        }
+        Button(
+            attrs = {
+                onClick {
+                    val currentCenter = cameraPositionState.position.center
+                    val randomRange = 0.5
+                    cameraPositionState.position = cameraPositionState.position.copy(
+                        center = LatLng(
+                            currentCenter.lat + Random.nextDouble(-randomRange, randomRange),
+                            currentCenter.lng + Random.nextDouble(-randomRange, randomRange),
+                        )
+                    )
+                }
+            }
+        ) {
+            Text("Move Camera Randomly")
+        }
     }
 
     Div(
         attrs = {
             style {
-                margin(10.px)
+                margin(5.px)
             }
         }
     ) {
-        Text("Camera Position: ${cameraPositionState.position.center}")
+        if (polyline.isNotEmpty()) {
+            Span(
+                attrs = {
+                    style {
+                        color(Color("#EE4411"))
+                        fontWeight("bold")
+                    }
+                }
+            ) {
+                Text("Taiwan High Speed Rail")
+            }
+        }
         Button(
             attrs = {
+                style {
+                    marginLeft(10.px)
+                    marginRight(10.px)
+                }
                 onClick {
-//                            val currentCenter = cameraPositionState.position.center
-//                            cameraPositionState.position = CameraPosition(
-//                                center = LatLng(currentCenter.lat + 0.1, currentCenter.lng + 0.1),
-//                                zoom = 8.0,
-//                            )
-                    polyline = emptyList()
-//                                listOf(
-//                                LatLng(23.2, 120.5),
-//                                LatLng(23.6, 120.6),
-//                                LatLng(22.4, 120.2),
-//                                LatLng(23.5, 120.8),
-//                            )
+                    if (polyline.isNotEmpty()) {
+                        polyline = emptyList()
+                        return@onClick
+                    }
+                    val path = "{d|wCkjfeVv^|rP`uEvgInChuo@l_g@zaa@fpf@l}h@pk_Bb{g@|mm@dcGh}Yzz]jbu@nhQllgBjdFzfm@_fC"
+                    polyline = path.decodePath()
                 }
             }
         ) {
-            Text("Click me")
+            Text(if (polyline.isEmpty()) "Draw Polyline" else "Clear Polyline")
+        }
+
+        if (polygon.isNotEmpty()) {
+            Span(
+                attrs = {
+                    style {
+                        color(Color("#EE4411"))
+                        fontWeight("bold")
+                        marginLeft(10.px)
+                    }
+                }
+            ) {
+                Text("Taipei City")
+            }
+        }
+        Button(
+            attrs = {
+                style {
+                    marginLeft(10.px)
+                    marginRight(10.px)
+                }
+                onClick {
+                    if (polygon.isNotEmpty()) {
+                        polygon = emptyList()
+                        return@onClick
+                    }
+                    val path = """
+                        odwwCwmqeVhWtG{BhbEns@|nDp|ChRf`BcAze@o{Btm@jhCa`@vnCtHp_BoyBre@gZ~eBi{@
+                        zi@_dAfBgfA~eBxkAzrBgj@~c@}lC`^yh@wbBevCwh@qcD~_Bap@vaEeqBfCgtDs{CykCyqB
+                        hWycB{wCs|CaaBqnBl~AgfBvlCsGd{@wdAdcEk}AjxBtt@h{A_oDbiE`l@|kCaO|eAslC~Oc~B
+                    """.trimIndent().replace("\n", "")
+                    polygon = path.decodePath()
+                }
+            }
+        ) {
+            Text(if (polygon.isEmpty()) "Draw Polygon" else "Clear Polygon")
+        }
+
+        Button(
+            attrs = {
+                style {
+                    marginLeft(10.px)
+                }
+                onClick {
+                    markers = markers + listOf(
+                        MarkerState(
+                            position = LatLng(
+                                cameraPositionState.position.center.lat,
+                                cameraPositionState.position.center.lng,
+                            )
+                        )
+                    )
+                }
+            }
+        ) {
+            Text("Add Marker At Camera Center")
+        }
+
+        Button(
+            attrs = {
+                style {
+                    marginLeft(10.px)
+                }
+                onClick {
+                    markers = emptyList()
+                }
+            }
+        ) {
+            Text("Clear Markers")
         }
     }
 
-    Div(
+
+    GoogleMap(
+        apiKey = apiKey,
+        cameraPositionState = cameraPositionState,
+        extra = "libraries=geometry", // Required for decoding path from encoded string
         attrs = {
             style {
                 width(100.percent)
@@ -140,29 +250,27 @@ private fun Map(
             }
         }
     ) {
-        GoogleMap(
-            apiKey = apiKey,
-            cameraPositionState = cameraPositionState,
-            attrs = {
-                style {
-                    width(500.px)
-                    height(500.px)
-                }
-            }
-        ) {
-            if (polyline.isNotEmpty()) {
-//            Polyline(
-//                points = polyline,
-//                color = "#FFBB22",
-//                width = 5,
-//            )
-                Polygon(
-                    points = polyline,
-                    fillColor = "#FFBB22",
-                    strokeColor = "#FF0000",
-                    strokeWidth = 5,
-                )
-            }
+        if (polyline.isNotEmpty()) {
+            Polyline(
+                points = polyline,
+                color = "#EE4411",
+            )
+        }
+
+        if (polygon.isNotEmpty()) {
+            Polygon(
+                points = polygon,
+                fillColor = "#EE4411",
+                strokeColor = "#DD8822",
+            )
+        }
+
+        markers.forEach { marker ->
+            Marker(
+                state = marker,
+                title = "Hello, Marker ${marker.position.asString()}!",
+                icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+            )
         }
     }
 

@@ -31,9 +31,21 @@ GoogleMap(
 )
 ```
 
-# Documentation
+## Drawing on the map
 
-Still in progress.
+Adding child composables to the `GoogleMap` content.
+
+**NOTE** currently, only `Marker`, `Polyline`, and `Polygon` are supported, and only limited attributes are supported.
+
+```kotlin
+GoogleMap(
+    // ...
+) {
+    Marker(
+        state = MarkerState(position = LatLng(23.2, 120.5)),
+    )
+}
+```
 
 # Setup
 
