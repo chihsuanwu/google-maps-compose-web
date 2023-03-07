@@ -16,13 +16,18 @@ internal fun newPolygon(options: PolygonOptions): JsPolygon {
 }
 
 internal external interface PolygonOptions {
-
-    var path: Array<LatLngJson>
-
+    var clickable: Boolean
+    var draggable: Boolean
+    var editable: Boolean
     var fillColor: String
-
+    var fillOpacity: Double
+    var geodesic: Boolean
+    var map: MapView?
+    var paths: Array<LatLngJson>
     var strokeColor: String
-
+    var strokeOpacity: Double
+    var strokePosition: dynamic
     var strokeWeight: Int
-
+    var visible: Boolean
+    var zIndex: Double
 }

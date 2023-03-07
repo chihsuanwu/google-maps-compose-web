@@ -16,11 +16,16 @@ internal fun newPolyline(options: PolylineOptions): JsPolyline {
 }
 
 internal external interface PolylineOptions {
-
+    var clickable: Boolean
+    var draggable: Boolean
+    var editable: Boolean
+    var geodesic: Boolean
+    // TODO: var icons: Array<IconSequence>
+    var map: MapView?
     var path: Array<LatLngJson>
-
     var strokeColor: String
-
+    var strokeOpacity: Double
     var strokeWeight: Int
-
+    var visible: Boolean
+    var zIndex: Double
 }

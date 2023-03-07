@@ -253,7 +253,9 @@ private fun Map(
         if (polyline.isNotEmpty()) {
             Polyline(
                 points = polyline,
+                clickable = false,
                 color = "#EE4411",
+                opacity = 0.8,
             )
         }
 
@@ -261,6 +263,7 @@ private fun Map(
             Polygon(
                 points = polygon,
                 fillColor = "#EE4411",
+                fillOpacity = 0.38,
                 strokeColor = "#DD8822",
             )
         }

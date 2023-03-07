@@ -2,6 +2,7 @@ package com.chihsuanwu.maps.compose.web.jsobject
 
 import com.chihsuanwu.maps.compose.web.CameraPosition
 import com.chihsuanwu.maps.compose.web.LatLng
+import com.chihsuanwu.maps.compose.web.StrokePosition
 import js.core.jso
 
 /**
@@ -18,6 +19,10 @@ internal fun LatLng.toLatLngJson(): LatLngJson {
         lat = this@toLatLngJson.lat
         lng = this@toLatLngJson.lng
     }
+}
+
+internal fun List<LatLng>.toLatLngJsonArray(): Array<LatLngJson> {
+    return map { it.toLatLngJson() }.toTypedArray()
 }
 
 /**
@@ -50,5 +55,13 @@ internal fun CameraPosition.toCameraOptions(): CameraOptions {
         zoom = this@toCameraOptions.zoom
         tilt = this@toCameraOptions.tilt
         heading = this@toCameraOptions.heading
+    }
+}
+
+internal fun StrokePosition.toJs(): dynamic {
+    return when (this) {
+        StrokePosition.CENTER -> js("google.maps.StrokePosition.CENTER")
+        StrokePosition.INSIDE -> js("google.maps.StrokePosition.INSIDE")
+        StrokePosition.OUTSIDE -> js("google.maps.StrokePosition.OUTSIDE")
     }
 }
