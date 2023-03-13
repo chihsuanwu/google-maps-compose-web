@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
-import com.chihsuanwu.maps.compose.web.jsobject.JsPolygon
-import com.chihsuanwu.maps.compose.web.jsobject.newPolyline
-import com.chihsuanwu.maps.compose.web.jsobject.toLatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toJs
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJsonArray
 import js.core.jso
 
 internal class PolygonNode(
@@ -39,9 +38,9 @@ internal class PolygonNode(
  * @param zIndex The zIndex compared to other polys.
  */
 @Composable
-public fun Polygon(
+fun Polygon(
     points: List<LatLng>,
-    clickable: Boolean = false,
+    clickable: Boolean = true,
     draggable: Boolean = false,
     editable: Boolean = false,
     fillColor: String = "#000000",
@@ -49,11 +48,13 @@ public fun Polygon(
     geodesic: Boolean = false,
     strokeColor: String = "#000000",
     strokeOpacity: Double = 1.0,
-    strokeWidth: Int = 2,
+    strokeWidth: Int = 5,
     strokePosition: StrokePosition = StrokePosition.CENTER,
     visible: Boolean = true,
-    zIndex: Double = 0.0,
+    zIndex: Double? = null,
     // TODO: add other properties
+    events: Map<String, (Any) -> Unit> = emptyMap(),
+    onClick: (Any) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<PolygonNode, MapApplier>(
@@ -76,9 +77,7 @@ public fun Polygon(
                     this.zIndex = zIndex
                 }
             )
-            PolygonNode(
-                polygon
-            )
+            PolygonNode(polygon)
         },
         update = {
             set(points) { polygon.setOptions(jso { this.paths = points.toLatLngJsonArray() }) }
@@ -94,6 +93,9 @@ public fun Polygon(
             set(strokePosition) { polygon.setOptions(jso { this.strokePosition = strokePosition.toJs() }) }
             set(visible) { polygon.setOptions(jso { this.visible = visible }) }
             set(zIndex) { polygon.setOptions(jso { this.zIndex = zIndex }) }
+
+            set(onClick) { polygon.addListener("click", onClick) }
+            set(events) { events.forEach { (event, callback) -> polygon.addListener(event, callback) } }
         }
     )
 }

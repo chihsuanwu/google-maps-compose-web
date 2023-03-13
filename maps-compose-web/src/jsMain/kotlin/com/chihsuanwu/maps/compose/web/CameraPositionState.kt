@@ -5,10 +5,6 @@ import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import com.chihsuanwu.maps.compose.web.jsobject.toCameraOptions
 
 
-data class LatLng(
-    val lat: Double,
-    val lng: Double,
-)
 
 data class CameraPosition(
     val center: LatLng,
@@ -21,13 +17,13 @@ data class CameraPosition(
  * Create and [remember] a [CameraPositionState].
  */
 @Composable
-public inline fun rememberCameraPositionState(
+inline fun rememberCameraPositionState(
     crossinline init: CameraPositionState.() -> Unit = {},
 ): CameraPositionState = remember {
     CameraPositionState().apply(init)
 }
 
-public class CameraPositionState(
+class CameraPositionState(
     position: CameraPosition = CameraPosition(
         center = LatLng(0.0, 0.0),
         zoom = 0.0,
@@ -36,7 +32,7 @@ public class CameraPositionState(
     /**
      * Whether the camera is currently moving or not.
      */
-    public var isMoving: Boolean by mutableStateOf(false)
+    var isMoving: Boolean by mutableStateOf(false)
         internal set
 
 
@@ -45,7 +41,7 @@ public class CameraPositionState(
     /**
      * Current position of the camera on the map.
      */
-    public var position: CameraPosition
+    var position: CameraPosition
         get() = rawPosition
         set(value) {
             val map = map

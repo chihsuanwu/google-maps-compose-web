@@ -253,10 +253,17 @@ private fun Map(
         if (polyline.isNotEmpty()) {
             Polyline(
                 points = polyline,
-                clickable = false,
+                clickable = true,
                 color = "#EE4411",
                 opacity = 0.8,
-            )
+                events = mapOf(
+                    "dblclick" to {
+                        console.log("Polyline double clicked!")
+                    }
+                )
+            ) {
+                console.log("Polyline clicked!")
+            }
         }
 
         if (polygon.isNotEmpty()) {
@@ -273,6 +280,12 @@ private fun Map(
                 state = marker,
                 title = "Hello, Marker ${marker.position.asString()}!",
                 icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+                draggable = true,
+                events = mapOf(
+                    "dragend" to {
+                        console.log("Marker dragged!")
+                    }
+                )
             )
         }
     }

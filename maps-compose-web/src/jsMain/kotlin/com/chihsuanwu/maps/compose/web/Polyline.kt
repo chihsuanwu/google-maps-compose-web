@@ -5,12 +5,11 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.JsPolyline
 import com.chihsuanwu.maps.compose.web.jsobject.newPolyline
-import com.chihsuanwu.maps.compose.web.jsobject.toLatLngJson
-import com.chihsuanwu.maps.compose.web.jsobject.toLatLngJsonArray
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJsonArray
 import js.core.jso
 
 internal class PolylineNode(
-    val polyline: JsPolyline,
+    val polyline: JsPolyline
 ) : MapNode {
     override fun onRemoved() {
         polyline.setMap(null)
@@ -34,9 +33,12 @@ internal class PolylineNode(
  * @param visible Whether this polyline is visible on the map.
  * @param width The width of the polyline in pixels.
  * @param zIndex The zIndex compared to other polys.
+ *
+ * @param events A map of event names to event handlers.
+ * @param onClick A callback to be invoked when the polyline is clicked.
  */
 @Composable
-public fun Polyline(
+fun Polyline(
     points: List<LatLng>,
     clickable: Boolean = true,
     color: String = "#000000",
@@ -45,9 +47,11 @@ public fun Polyline(
     geodesic: Boolean = false,
     opacity: Double = 1.0,
     visible: Boolean = true,
-    width: Int = 2,
-    zIndex: Double = 0.0,
+    width: Int = 5,
+    zIndex: Double? = null,
     // TODO: add other properties
+    events: Map<String, (Any) -> Unit> = emptyMap(),
+    onClick: (Any) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<PolylineNode, MapApplier>(
@@ -67,9 +71,7 @@ public fun Polyline(
                     this.zIndex = zIndex
                 }
             )
-            PolylineNode(
-                polyline
-            )
+            PolylineNode(polyline)
         },
         update = {
             set(points) { polyline.setOptions(jso { this.path = points.toLatLngJsonArray() }) }
@@ -82,6 +84,9 @@ public fun Polyline(
             set(visible) { polyline.setOptions(jso { this.visible = visible }) }
             set(width) { polyline.setOptions(jso { this.strokeWeight = width }) }
             set(zIndex) { polyline.setOptions(jso { this.zIndex = zIndex }) }
+
+            set(onClick) { polyline.addListener("click", onClick) }
+            set(events) { events.forEach { (event, callback) -> polyline.addListener(event, callback) } }
         }
     )
 }

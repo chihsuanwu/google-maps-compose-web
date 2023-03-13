@@ -3,14 +3,14 @@ package com.chihsuanwu.maps.compose.web
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import com.chihsuanwu.maps.compose.web.jsobject.newMap
-import com.chihsuanwu.maps.compose.web.jsobject.toLatLngJson
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.awaitCancellation
 import org.jetbrains.compose.web.css.height
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.width
-import org.jetbrains.compose.web.dom.*
+import org.jetbrains.compose.web.dom.AttrBuilderContext
+import org.jetbrains.compose.web.dom.Div
 import org.w3c.dom.HTMLDivElement
 
 /**
@@ -24,7 +24,7 @@ import org.w3c.dom.HTMLDivElement
  * @param content the content of the map
  */
 @Composable
-public fun GoogleMap(
+fun GoogleMap(
     apiKey: String?,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
     id: String = "map",

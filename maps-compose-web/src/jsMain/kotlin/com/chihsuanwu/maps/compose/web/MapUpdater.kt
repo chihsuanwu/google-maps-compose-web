@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.MapView
-import com.chihsuanwu.maps.compose.web.jsobject.toLatLng
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLng
 
 
 internal class MapPropertiesNode(

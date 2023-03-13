@@ -5,8 +5,8 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.JsCircle
 import com.chihsuanwu.maps.compose.web.jsobject.newCircle
-import com.chihsuanwu.maps.compose.web.jsobject.toJs
-import com.chihsuanwu.maps.compose.web.jsobject.toLatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toJs
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJson
 import js.core.jso
 
 internal class CircleNode(
@@ -35,9 +35,9 @@ internal class CircleNode(
  * @param zIndex The zIndex compared to other circles.
  */
 @Composable
-public fun Circle(
+fun Circle(
     center: LatLng,
-    clickable: Boolean = false,
+    clickable: Boolean = true,
     draggable: Boolean = false,
     editable: Boolean = false,
     fillColor: String = "#000000",
@@ -45,11 +45,13 @@ public fun Circle(
     radius: Double = 0.0,
     strokeColor: String = "#000000",
     strokeOpacity: Double = 1.0,
-    strokeWidth: Int = 2,
+    strokeWidth: Int = 5,
     strokePosition: StrokePosition = StrokePosition.CENTER,
     visible: Boolean = true,
-    zIndex: Double = 0.0,
+    zIndex: Double? = null,
     // TODO: add other properties
+    events: Map<String, (Any) -> Unit> = emptyMap(),
+    onClick: (Any) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<CircleNode, MapApplier>(
@@ -72,9 +74,7 @@ public fun Circle(
                     this.zIndex = zIndex
                 }
             )
-            CircleNode(
-                circle
-            )
+            CircleNode(circle)
         },
         update = {
             set(center) { circle.setOptions(jso { this.center = center.toLatLngJson() }) }
@@ -90,6 +90,9 @@ public fun Circle(
             set(strokePosition) { circle.setOptions(jso { this.strokePosition = strokePosition.toJs() }) }
             set(visible) { circle.setOptions(jso { this.visible = visible }) }
             set(zIndex) { circle.setOptions(jso { this.zIndex = zIndex }) }
+
+            set(onClick) { circle.addListener("click", onClick) }
+            set(events) { events.forEach { (event, callback) -> circle.addListener(event, callback) } }
         }
     )
 }

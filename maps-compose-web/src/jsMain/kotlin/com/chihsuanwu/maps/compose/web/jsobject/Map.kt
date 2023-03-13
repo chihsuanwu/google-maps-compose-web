@@ -1,5 +1,11 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
+import com.chihsuanwu.maps.compose.web.CameraPosition
+import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLng
+import com.chihsuanwu.maps.compose.web.jsobject.utils.LatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJson
+import js.core.jso
+
 
 /**
  * A [google.maps.Map](https://developers.google.com/maps/documentation/javascript/reference/map) object.
@@ -40,4 +46,24 @@ internal fun newMap(
     id: String
 ): MapView {
     return js("new google.maps.Map(document.getElementById(id));") as MapView
+}
+
+/**
+ * A [google.maps.CameraOptions](https://developers.google.com/maps/documentation/javascript/reference/map#CameraOptions)
+ * object.
+ */
+internal external interface CameraOptions {
+    var center: LatLngJson
+    var zoom: Double
+    var tilt: Double
+    var heading: Double
+}
+
+internal fun CameraPosition.toCameraOptions(): CameraOptions {
+    return jso {
+        center = this@toCameraOptions.center.toLatLngJson()
+        zoom = this@toCameraOptions.zoom
+        tilt = this@toCameraOptions.tilt
+        heading = this@toCameraOptions.heading
+    }
 }
