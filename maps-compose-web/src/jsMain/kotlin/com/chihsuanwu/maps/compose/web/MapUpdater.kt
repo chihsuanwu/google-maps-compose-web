@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.MapView
+import com.chihsuanwu.maps.compose.web.jsobject.toJsMapOptions
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLng
 
 
@@ -45,7 +46,8 @@ internal class MapPropertiesNode(
 
 @Composable
 internal fun MapUpdater(
-    cameraPositionState: CameraPositionState
+    cameraPositionState: CameraPositionState,
+    mapOptions: MapOptions,
 ) {
     val map = (currentComposer.applier as MapApplier).map
 
@@ -58,5 +60,6 @@ internal fun MapUpdater(
         }
     ) {
         update(cameraPositionState) { this.cameraPositionState = it }
+        update(mapOptions) { map.setOptions(it.toJsMapOptions()) }
     }
 }

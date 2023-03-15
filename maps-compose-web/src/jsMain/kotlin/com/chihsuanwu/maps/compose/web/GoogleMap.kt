@@ -3,6 +3,7 @@ package com.chihsuanwu.maps.compose.web
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import com.chihsuanwu.maps.compose.web.jsobject.newMap
+import com.chihsuanwu.maps.compose.web.jsobject.toJsMapOptions
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.awaitCancellation
@@ -19,7 +20,10 @@ import org.w3c.dom.HTMLDivElement
  * @param apiKey the API key to use for the map.
  * @param cameraPositionState the [CameraPositionState] to be used to control or observe the map's
  * camera state
+ * @param mapOptions the [MapOptions] to be used to configure the map.
  * @param id The id of the element to be used as the map container.
+ * @param extra The extra parameters to be appended to the Google Maps API URL. For example, you can
+ * add `"libraries=geometry"` to load the geometry library.
  * @param attrs The attributes to be applied to the map container.
  * @param content the content of the map
  */
@@ -27,6 +31,7 @@ import org.w3c.dom.HTMLDivElement
 fun GoogleMap(
     apiKey: String?,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
+    mapOptions: MapOptions = MapOptions(),
     id: String = "map",
     extra: String? = null,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
@@ -47,7 +52,7 @@ fun GoogleMap(
     }
 
     window.asDynamic().initMap = {
-        map = newMap(id = id)
+        map = newMap(id = id, options = mapOptions.toJsMapOptions())
     }
 
     val currentCameraPositionState by rememberUpdatedState(cameraPositionState)
@@ -62,6 +67,7 @@ fun GoogleMap(
                 currentMap.newComposition(parentComposition) {
                     MapUpdater(
                         cameraPositionState = currentCameraPositionState,
+                        mapOptions = mapOptions,
                     )
                     currentContent?.invoke()
                 }
