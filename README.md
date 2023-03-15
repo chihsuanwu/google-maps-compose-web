@@ -31,11 +31,31 @@ GoogleMap(
 )
 ```
 
+## Configuring the map
+
+Configuring the map can be done by passing a `MapOptions` object to the `GoogleMap` composable.
+
+**NOTE** currently, some sub-options only expose by dynamic attributes, e.g., `MapOptions.fullscreenControlOptions`.
+
+```kotlin
+val mapOptions = remember {
+    MapOptions(
+        fullscreenControl = false,
+        // ...
+    )
+}
+GoogleMap(
+    mapOptions = mapOptions,
+) {
+    // ...
+}
+```
+
 ## Drawing on the map
 
 Adding child composables to the `GoogleMap` content.
 
-**NOTE** currently, only `Marker`, `Polyline`, and `Polygon` are supported, and only limited attributes are supported.
+**NOTE** currently, only `Marker`, `Polyline`, `Polygon`, and `Circle` are supported, and only limited attributes are supported.
 
 ```kotlin
 GoogleMap(
