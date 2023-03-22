@@ -6,7 +6,7 @@ A library for using Google Maps in [Compose for Web](https://github.com/JetBrain
 
 This library is heavily inspired by [Maps Compose for Android](https://github.com/googlemaps/android-maps-compose).
 
-**Note that this library is still in development and is not yet ready for production use.**
+**Note that this library is still in its early stages, and the API is subject to change.**
 
 # Usage
 
@@ -45,6 +45,7 @@ val mapOptions = remember {
     )
 }
 GoogleMap(
+    // ...
     mapOptions = mapOptions,
 ) {
     // ...
@@ -53,9 +54,7 @@ GoogleMap(
 
 ## Drawing on the map
 
-Adding child composables to the `GoogleMap` content.
-
-**NOTE** currently, only `Marker`, `Polyline`, `Polygon`, and `Circle` are supported, and only limited attributes are supported.
+Adding child composable, such as `Marker`, to the `GoogleMap` composable.
 
 ```kotlin
 GoogleMap(
@@ -63,8 +62,58 @@ GoogleMap(
 ) {
     Marker(
         state = MarkerState(position = LatLng(23.2, 120.5)),
+        // ...
     )
 }
+```
+
+### Handling component events
+
+Components expose `onClick` events as a lambda expression. Other events can be handled 
+by `events` parameter, which accepts an event builder.
+
+```kotlin
+Marker(
+    // ...
+    events = {
+        onDragEnd = {
+            console.log("Marker dragged!")
+        }
+        onDoubleClick = {
+            console.log("Marker double clicked!")
+        }
+        // other events ...
+    },
+    onClick = {
+        console.log("Marker clicked!")
+    }
+)
+```
+
+### Marker's Info Window
+
+An info window can be added to a marker by passing a composable to the `infoContent` parameter.
+
+To show the info window, call `showInfoWindow()` on the `MarkerState`.
+
+```kotlin
+state = rememberMarkerState()
+
+Marker(
+    state = state,
+    // ...
+    infoContent = {
+        Div {
+            Span({ style { fontSize(20.px) } }) {
+                Text("Info Window Title")
+            }
+            Text("Info Window Content")
+        }
+    }
+) 
+
+// show the info window
+state.showInfoWindow()
 ```
 
 # Setup
