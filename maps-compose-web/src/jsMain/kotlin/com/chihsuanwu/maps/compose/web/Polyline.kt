@@ -3,13 +3,14 @@ package com.chihsuanwu.maps.compose.web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
-import com.chihsuanwu.maps.compose.web.jsobject.JsPolyline
-import com.chihsuanwu.maps.compose.web.jsobject.newPolyline
+import com.chihsuanwu.maps.compose.web.jsobject.*
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJsonArray
 import js.core.jso
 
 internal class PolylineNode(
-    val polyline: JsPolyline
+    val polyline: JsPolyline,
+    var events: List<MapsEventListener>,
+    var onClick: MapsEventListener?,
 ) : MapNode {
     override fun onRemoved() {
         polyline.setMap(null)
@@ -49,9 +50,8 @@ fun Polyline(
     visible: Boolean = true,
     width: Int = 5,
     zIndex: Double? = null,
-    // TODO: add other properties
-    events: Map<String, (Any) -> Unit> = emptyMap(),
-    onClick: (Any) -> Unit = {},
+    events: EventsBuilder.() -> Unit = {},
+    onClick: (MouseEvent) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<PolylineNode, MapApplier>(
@@ -71,7 +71,7 @@ fun Polyline(
                     this.zIndex = zIndex
                 }
             )
-            PolylineNode(polyline)
+            PolylineNode(polyline, emptyList(), null)
         },
         update = {
             set(points) { polyline.setOptions(jso { this.path = points.toLatLngJsonArray() }) }
@@ -85,8 +85,19 @@ fun Polyline(
             set(width) { polyline.setOptions(jso { this.strokeWeight = width }) }
             set(zIndex) { polyline.setOptions(jso { this.zIndex = zIndex }) }
 
-            set(onClick) { polyline.addListener("click", onClick) }
-            set(events) { events.forEach { (event, callback) -> polyline.addListener(event, callback) } }
+            set(events) {
+                this.events.forEach { it.remove() }
+                this.events = EventsBuilder().apply(events).build().map { e ->
+                    when (e) {
+                        is Event.Unit -> polyline.addListener(e.event) { e.callback(it) }
+                        is Event.Mouse -> polyline.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
+                    }
+                }
+            }
+            set(onClick) {
+                this.onClick?.remove()
+                this.onClick = polyline.addListener("click") { onClick((it as MapMouseEvent).toMouseEvent()) }
+            }
         }
     )
 }

@@ -1,5 +1,7 @@
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -237,7 +239,6 @@ private fun Map(
         }
     }
 
-
     GoogleMap(
         apiKey = apiKey,
         cameraPositionState = cameraPositionState,
@@ -256,11 +257,11 @@ private fun Map(
                 clickable = true,
                 color = "#EE4411",
                 opacity = 0.8,
-                events = mapOf(
-                    "dblclick" to {
-                        console.log("Polyline double clicked!")
+                events = {
+                    onDoubleClick = {
+                        console.log("Polyline double clicked!, ${it.latLng.asString()}")
                     }
-                )
+                }
             ) {
                 console.log("Polyline clicked!")
             }
@@ -281,12 +282,50 @@ private fun Map(
                 title = "Hello, Marker ${marker.position.asString()}!",
                 icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
                 draggable = true,
-                events = mapOf(
-                    "dragend" to {
-                        console.log("Marker dragged!")
+                events = {
+                    onDragEnd = {
+                        console.log("Marker dragged! New position: ${it.latLng.asString()}")
                     }
-                )
-            )
+                    onDoubleClick = {
+                        console.log("Marker double clicked!")
+                    }
+                },
+                onClick = {
+                    console.log("Marker clicked at ${it.latLng.asString()}!")
+                    marker.showInfoWindow()
+                }
+            ) {
+                Div(
+                    attrs = {
+                        style {
+                            backgroundColor(Color("#0066BB"))
+                            padding(5.px)
+                            borderRadius(5.px)
+                        }
+                    }
+                ) {
+                    Span({
+                        style {
+                            color(Color("#FFFFFF"))
+                            fontWeight("bold")
+                        }
+                    }) {
+                        Text("Hello, Marker ${marker.position.asString()}!")
+                    }
+
+                    Button({
+                        style {
+                            color(Color("#FFCC00"))
+                            marginLeft(10.px)
+                        }
+                        onClick {
+                            marker.hideInfoWindow()
+                        }
+                    }) {
+                        Text("Close")
+                    }
+                }
+            }
         }
     }
 

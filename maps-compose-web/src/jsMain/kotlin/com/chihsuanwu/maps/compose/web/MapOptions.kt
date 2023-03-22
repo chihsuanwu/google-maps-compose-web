@@ -1,5 +1,13 @@
 package com.chihsuanwu.maps.compose.web
 
+/**
+ * Data class for configuring [GoogleMap] options
+ *
+ * See [MapOptions](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions)
+ * for more details
+ *
+ * Note that some attributes that are duplicated in other controllers are not included here
+ */
 data class MapOptions(
     val backgroundColor: String? = null,
     val clickableIcons: Boolean? = null,

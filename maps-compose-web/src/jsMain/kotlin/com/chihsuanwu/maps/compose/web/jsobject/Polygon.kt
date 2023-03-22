@@ -5,13 +5,11 @@ import com.chihsuanwu.maps.compose.web.jsobject.utils.LatLngJson
 /**
  * A [google.maps.Polygon](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon.constructor) object
  */
-internal external interface JsPolygon {
+internal external interface JsPolygon : AddListener {
 
     fun setMap(map: MapView?)
 
     fun setOptions(options: PolygonOptions)
-
-    fun addListener(event: String, callback: (Any) -> Unit)
 }
 
 internal fun newPolygon(options: PolygonOptions): JsPolygon {

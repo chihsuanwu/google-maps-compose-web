@@ -1,20 +1,25 @@
 package com.chihsuanwu.maps.compose.web
 
 import androidx.compose.runtime.*
-import com.chihsuanwu.maps.compose.web.jsobject.JsMarker
-import com.chihsuanwu.maps.compose.web.jsobject.newMarker
+import com.chihsuanwu.maps.compose.web.jsobject.*
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLng
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJson
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toPointJson
 import js.core.jso
-import org.w3c.workers.Client
+import kotlinx.browser.document
+import org.jetbrains.compose.web.renderComposable
 
 internal class MarkerNode(
     val marker: JsMarker,
     val markerState: MarkerState,
+    var events: List<MapsEventListener>,
+    var onClick: MapsEventListener?,
+    val infoContent: (@Composable () -> Unit)?
 ) : MapNode {
     override fun onAttached() {
         markerState.marker = marker
+        markerState.infoContent = infoContent
+
         marker.addListener("dragend") {
             markerState.position = marker.getPosition().toLatLng()
         }
@@ -56,6 +61,42 @@ class MarkerState(
             }
             markerState.value = value
         }
+
+    var infoContent: (@Composable () -> Unit)? = null
+
+    private var infoWindow: InfoWindow? = null
+
+    fun showInfoWindow() {
+        if (infoWindow != null) return
+//        val marker = marker ?: return
+//        val infoContent = infoContent ?: return
+        // Above code will cause compile error: Type inference failed. Expected type mismatch
+        // Don't know why, following code works fine.:
+        if (marker == null || infoContent == null) return
+        val marker = marker!!
+        val infoContent = infoContent!!
+
+        val root = document.createElement("div")
+
+        renderComposable(root) {
+            infoContent()
+        }
+
+        infoWindow = newInfoWindow().apply {
+            addListener("closeclick") { infoWindow = null }
+            setContent(root)
+            open(
+                jso {
+                    anchor = marker
+                }
+            )
+        }
+    }
+
+    fun hideInfoWindow() {
+        infoWindow?.close()
+        infoWindow = null
+    }
 }
 
 @Composable
@@ -78,7 +119,7 @@ fun rememberMarkerState(
 @Composable
 fun Marker(
     state: MarkerState = rememberMarkerState(),
-    anchor: Point = Point(0.5, 1.0),
+    anchor: Point? = null,
     clickable: Boolean = true,
     crossOnDrag: Boolean = true,
     // TODO: cursor
@@ -91,9 +132,9 @@ fun Marker(
     title: String? = null,
     visible: Boolean = true,
     zIndex: Double? = null,
-    // TODO: add other properties
-    events: Map<String, (Any) -> Unit> = emptyMap(),
-    onClick: (Any) -> Unit = {},
+    events: EventsBuilder.() -> Unit = {},
+    onClick: (MouseEvent) -> Unit = {},
+    infoContent: (@Composable () -> Unit)? = null,
 ) {
     MarkerImpl(
         state = state,
@@ -109,7 +150,8 @@ fun Marker(
         visible = visible,
         zIndex = zIndex,
         events = events,
-        onClick = onClick
+        onClick = onClick,
+        infoContent = infoContent
     )
 }
 
@@ -117,7 +159,7 @@ fun Marker(
 @Composable
 private fun MarkerImpl(
     state: MarkerState = rememberMarkerState(),
-    anchor: Point = Point(0.5, 1.0),
+    anchor: Point? = null,
     clickable: Boolean = true,
     crossOnDrag: Boolean = true,
     // TODO: cursor
@@ -130,9 +172,9 @@ private fun MarkerImpl(
     title: String? = null,
     visible: Boolean = true,
     zIndex: Double? = null,
-    // TODO: add other properties
-    events: Map<String, (Any) -> Unit> = emptyMap(),
-    onClick: (Any) -> Unit = {},
+    events: EventsBuilder.() -> Unit = {},
+    onClick: (MouseEvent) -> Unit = {},
+    infoContent: (@Composable () -> Unit)? = null,
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<MarkerNode, MapApplier>(
@@ -140,7 +182,7 @@ private fun MarkerImpl(
             val marker = newMarker(
                 jso {
                     this.position = state.position.toLatLngJson()
-                    this.anchorPoint = anchor.toPointJson()
+                    this.anchorPoint = anchor?.toPointJson()
                     this.clickable = clickable
                     this.crossOnDrag = crossOnDrag
                     this.draggable = draggable
@@ -155,13 +197,18 @@ private fun MarkerImpl(
                 }
             )
             MarkerNode(
-                marker,
-                state
+                marker = marker,
+                markerState = state,
+                events = emptyList(),
+                onClick = null,
+                infoContent = infoContent,
             )
         },
         update = {
             set(state.position) { marker.setOptions(jso { this.position = state.position.toLatLngJson() }) }
-            set(anchor) { marker.setOptions(jso { this.anchorPoint = anchor.toPointJson() }) }
+            set(anchor) {
+                anchor?.let { marker.setOptions(jso { this.anchorPoint = it.toPointJson() }) }
+            }
             set(clickable) { marker.setOptions(jso { this.clickable = clickable }) }
             set(crossOnDrag) { marker.setOptions(jso { this.crossOnDrag = crossOnDrag }) }
             set(draggable) { marker.setOptions(jso { this.draggable = draggable }) }
@@ -174,11 +221,18 @@ private fun MarkerImpl(
             set(zIndex) { marker.setOptions(jso { this.zIndex = zIndex }) }
 
             set(events) {
-                events.forEach { (event, listener) ->
-                    marker.addListener(event) { listener(it) }
+                this.events.forEach { it.remove() }
+                this.events = EventsBuilder().apply(events).build().map { e ->
+                    when (e) {
+                        is Event.Unit -> marker.addListener(e.event) { e.callback(it) }
+                        is Event.Mouse -> marker.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
+                    }
                 }
             }
-            set(onClick) { marker.addListener("click") { onClick(it) } }
+            set(onClick) {
+                this.onClick?.remove()
+                this.onClick = marker.addListener("click") { onClick((it as MapMouseEvent).toMouseEvent()) }
+            }
         }
     )
 }

@@ -3,14 +3,15 @@ package com.chihsuanwu.maps.compose.web
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
-import com.chihsuanwu.maps.compose.web.jsobject.JsCircle
-import com.chihsuanwu.maps.compose.web.jsobject.newCircle
+import com.chihsuanwu.maps.compose.web.jsobject.*
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toJs
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJson
 import js.core.jso
 
 internal class CircleNode(
-    val circle: JsCircle
+    val circle: JsCircle,
+    var events: List<MapsEventListener>,
+    var onClick: MapsEventListener?,
 ) : MapNode {
     override fun onRemoved() {
         circle.setMap(null)
@@ -49,9 +50,8 @@ fun Circle(
     strokePosition: StrokePosition = StrokePosition.CENTER,
     visible: Boolean = true,
     zIndex: Double? = null,
-    // TODO: add other properties
-    events: Map<String, (Any) -> Unit> = emptyMap(),
-    onClick: (Any) -> Unit = {},
+    events: EventsBuilder.() -> Unit = {},
+    onClick: (MouseEvent) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<CircleNode, MapApplier>(
@@ -74,7 +74,7 @@ fun Circle(
                     this.zIndex = zIndex
                 }
             )
-            CircleNode(circle)
+            CircleNode(circle, emptyList(), null)
         },
         update = {
             set(center) { circle.setOptions(jso { this.center = center.toLatLngJson() }) }
@@ -91,8 +91,19 @@ fun Circle(
             set(visible) { circle.setOptions(jso { this.visible = visible }) }
             set(zIndex) { circle.setOptions(jso { this.zIndex = zIndex }) }
 
-            set(onClick) { circle.addListener("click", onClick) }
-            set(events) { events.forEach { (event, callback) -> circle.addListener(event, callback) } }
+            set(events) {
+                this.events.forEach { it.remove() }
+                this.events = EventsBuilder().apply(events).build().map { e ->
+                    when (e) {
+                        is Event.Unit -> circle.addListener(e.event) { e.callback(it) }
+                        is Event.Mouse -> circle.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
+                    }
+                }
+            }
+            set(onClick) {
+                this.onClick?.remove()
+                this.onClick = circle.addListener("click") { onClick((it as MapMouseEvent).toMouseEvent()) }
+            }
         }
     )
 }

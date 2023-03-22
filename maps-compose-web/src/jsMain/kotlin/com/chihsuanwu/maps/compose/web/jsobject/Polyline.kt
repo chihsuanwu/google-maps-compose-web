@@ -5,13 +5,11 @@ import com.chihsuanwu.maps.compose.web.jsobject.utils.LatLngJson
 /**
  * A [google.maps.Polyline](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polyline.constructor) object
  */
-internal external interface JsPolyline {
+internal external interface JsPolyline : AddListener {
 
     fun setMap(map: MapView?)
 
     fun setOptions(options: PolylineOptions)
-
-    fun addListener(event: String, callback: (Any) -> Unit)
 }
 
 internal fun newPolyline(options: PolylineOptions): JsPolyline {

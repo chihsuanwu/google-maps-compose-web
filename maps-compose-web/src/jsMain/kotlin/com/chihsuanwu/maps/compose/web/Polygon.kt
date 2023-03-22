@@ -10,6 +10,8 @@ import js.core.jso
 
 internal class PolygonNode(
     val polygon: JsPolygon,
+    var events: List<MapsEventListener>,
+    var onClick: MapsEventListener?,
 ) : MapNode {
     override fun onRemoved() {
         polygon.setMap(null)
@@ -52,9 +54,8 @@ fun Polygon(
     strokePosition: StrokePosition = StrokePosition.CENTER,
     visible: Boolean = true,
     zIndex: Double? = null,
-    // TODO: add other properties
-    events: Map<String, (Any) -> Unit> = emptyMap(),
-    onClick: (Any) -> Unit = {},
+    events: EventsBuilder.() -> Unit = {},
+    onClick: (MouseEvent) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<PolygonNode, MapApplier>(
@@ -77,7 +78,7 @@ fun Polygon(
                     this.zIndex = zIndex
                 }
             )
-            PolygonNode(polygon)
+            PolygonNode(polygon, emptyList(), null)
         },
         update = {
             set(points) { polygon.setOptions(jso { this.paths = points.toLatLngJsonArray() }) }
@@ -94,8 +95,19 @@ fun Polygon(
             set(visible) { polygon.setOptions(jso { this.visible = visible }) }
             set(zIndex) { polygon.setOptions(jso { this.zIndex = zIndex }) }
 
-            set(onClick) { polygon.addListener("click", onClick) }
-            set(events) { events.forEach { (event, callback) -> polygon.addListener(event, callback) } }
+            set(events) {
+                this.events.forEach { it.remove() }
+                this.events = EventsBuilder().apply(events).build().map { e ->
+                    when (e) {
+                        is Event.Unit -> polygon.addListener(e.event) { e.callback(it) }
+                        is Event.Mouse -> polygon.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
+                    }
+                }
+            }
+            set(onClick) {
+                this.onClick?.remove()
+                this.onClick = polygon.addListener("click") { onClick((it as MapMouseEvent).toMouseEvent()) }
+            }
         }
     )
 }
