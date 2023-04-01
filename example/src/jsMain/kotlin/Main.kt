@@ -1,7 +1,5 @@
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.*
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -249,6 +247,20 @@ private fun Map(
                 flex(1) // Fill the remaining height
                 property("margin", "0 auto") // Center the map
             }
+        },
+        events = {
+            onContextMenu = {
+                console.log("Map context menu!, ${it.latLng.asString()}")
+            }
+            onDrag = {
+                console.log("Map dragged!")
+            }
+            onIdle = {
+                console.log("Map idle!")
+            }
+        },
+        onClick = {
+            console.log("Map clicked!, ${it.latLng.asString()}")
         }
     ) {
         if (polyline.isNotEmpty()) {

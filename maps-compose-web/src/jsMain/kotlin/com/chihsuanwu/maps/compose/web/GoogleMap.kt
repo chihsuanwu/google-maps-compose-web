@@ -25,6 +25,8 @@ import org.w3c.dom.HTMLDivElement
  * @param extra The extra parameters to be appended to the Google Maps API URL. For example, you can
  * add `"libraries=geometry"` to load the geometry library.
  * @param attrs The attributes to be applied to the map container.
+ * @param events The events to be applied to the map.
+ * @param onClick The click listener to be applied to the map.
  * @param content the content of the map
  */
 @Composable
@@ -35,6 +37,8 @@ fun GoogleMap(
     id: String = "map",
     extra: String? = null,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
+    events: MapEventsBuilder.() -> Unit = {},
+    onClick: (MouseEvent) -> Unit = {},
     content: @Composable (() -> Unit)? = null,
 ) {
     var map: MapView? by remember { mutableStateOf(null) }
@@ -68,6 +72,8 @@ fun GoogleMap(
                     MapUpdater(
                         cameraPositionState = currentCameraPositionState,
                         mapOptions = mapOptions,
+                        events = events,
+                        onClick = onClick,
                     )
                     currentContent?.invoke()
                 }

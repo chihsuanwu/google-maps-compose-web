@@ -38,6 +38,9 @@ internal class PolygonNode(
  * @param strokePosition The stroke position. Defaults to CENTER.
  * @param visible Whether this polygon is visible on the map.
  * @param zIndex The zIndex compared to other polys.
+ *
+ * @param events The events to be applied to the polygon.
+ * @param onClick A callback to be invoked when the polygon is clicked.
  */
 @Composable
 fun Polygon(

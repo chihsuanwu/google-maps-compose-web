@@ -115,6 +115,19 @@ fun rememberMarkerState(
  * @param anchor the anchor for the marker icon.
  * @param clickable Indicates whether this marker handles mouse events.
  * @param crossOnDrag If false, disables cross that appears beneath the marker when dragging.
+ * @param draggable Indicates whether this marker can be dragged.
+ * @param icon The icon for the foreground.
+ * @param label The marker label.
+ * @param opacity The marker's opacity between 0.0 and 1.0.
+ * @param optimized Optimization enhances performance by rendering many markers as a single static element.
+ * This is useful in cases where a large number of markers is required.
+ * @param title Rollover text. If provided, an accessibility text will be added to the marker with the provided value.
+ * @param visible Indicates whether this marker is visible.
+ * @param zIndex All markers are displayed on the map in order of their zIndex,
+ * with higher values displaying in front of markers with lower values.
+ *
+ * @param events the events to be applied to the marker.
+ * @param onClick A callback that will be invoked when the marker is clicked.
  */
 @Composable
 fun Marker(
@@ -124,8 +137,8 @@ fun Marker(
     crossOnDrag: Boolean = true,
     // TODO: cursor
     draggable: Boolean = false,
-    icon: String? = null,
-    label: String? = null,
+    icon: String? = null, // TODO: Icon/Symbol
+    label: String? = null, // TODO: MarkerLabel
     opacity: Double = 1.0,
     optimized: Boolean? = null,
     // TODO: shape

@@ -52,6 +52,31 @@ GoogleMap(
 }
 ```
 
+Map events can be handled by `events` parameter, which accepts an event builder.
+Additionally, `onClick` event can be handled by the `onClick` parameter.
+
+```kotlin
+GoogleMap(
+    // ...
+    events = {
+        onDrag = {
+            console.log("Map dragged!")
+        }
+        onIdle = {
+            console.log("Map idle!")
+        }
+        // other events ...
+    },
+    onClick = {
+        console.log("Map clicked!")
+    }
+) {
+    // ...
+}
+```
+
+
+
 ## Drawing on the map
 
 Adding child composable, such as `Marker`, to the `GoogleMap` composable.

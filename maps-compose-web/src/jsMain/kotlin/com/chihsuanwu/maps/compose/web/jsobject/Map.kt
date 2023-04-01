@@ -11,7 +11,7 @@ import js.core.jso
 /**
  * A [google.maps.Map](https://developers.google.com/maps/documentation/javascript/reference/map) object.
  */
-internal external interface MapView {
+internal external interface MapView : AddListener {
 
     /**
      * Returns the position displayed at the center of the map.
@@ -33,11 +33,6 @@ internal external interface MapView {
     fun setOptions(options: JsMapOptions)
 
     fun setZoom(zoom: Double)
-
-    /**
-     * Adds the given listener function to the given event name.
-     */
-    fun addListener(eventName: String, handler: () -> Unit)
 }
 
 /**

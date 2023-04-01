@@ -34,6 +34,9 @@ internal class CircleNode(
  * @param strokePosition The stroke position. Defaults to CENTER.
  * @param visible Whether this circle is visible on the map.
  * @param zIndex The zIndex compared to other circles.
+ *
+ * @param events The events to be applied to the circle.
+ * @param onClick A callback to be invoked when the circle is clicked.
  */
 @Composable
 fun Circle(

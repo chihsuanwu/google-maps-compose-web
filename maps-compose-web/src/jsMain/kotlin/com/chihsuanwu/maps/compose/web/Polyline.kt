@@ -35,7 +35,7 @@ internal class PolylineNode(
  * @param width The width of the polyline in pixels.
  * @param zIndex The zIndex compared to other polys.
  *
- * @param events A map of event names to event handlers.
+ * @param events The events to be applied to the polyline.
  * @param onClick A callback to be invoked when the polyline is clicked.
  */
 @Composable

@@ -8,6 +8,9 @@ internal external interface MapsEventListener {
 }
 
 internal external interface AddListener {
+    /**
+     * Adds the given listener function to the given event name.
+     */
     fun addListener(event: String, callback: (dynamic) -> Unit): MapsEventListener
 }
 
