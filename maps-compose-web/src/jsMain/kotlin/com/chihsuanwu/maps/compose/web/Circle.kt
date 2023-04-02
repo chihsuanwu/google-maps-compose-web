@@ -5,7 +5,7 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toJs
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteral
 import js.core.jso
 
 internal class CircleNode(
@@ -61,7 +61,7 @@ fun Circle(
         factory = {
             val circle = newCircle(
                 jso {
-                    this.center = center.toLatLngJson()
+                    this.center = center.toJsLatLngLiteral()
                     this.clickable = clickable
                     this.draggable = draggable
                     this.editable = editable
@@ -80,7 +80,7 @@ fun Circle(
             CircleNode(circle, emptyList(), null)
         },
         update = {
-            set(center) { circle.setOptions(jso { this.center = center.toLatLngJson() }) }
+            set(center) { circle.setOptions(jso { this.center = center.toJsLatLngLiteral() }) }
             set(clickable) { circle.setOptions(jso { this.clickable = clickable }) }
             set(draggable) { circle.setOptions(jso { this.draggable = draggable }) }
             set(editable) { circle.setOptions(jso { this.editable = editable }) }

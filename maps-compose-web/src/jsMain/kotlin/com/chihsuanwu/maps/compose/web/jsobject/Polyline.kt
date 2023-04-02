@@ -1,6 +1,6 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
-import com.chihsuanwu.maps.compose.web.jsobject.utils.LatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLngLiteral
 
 /**
  * A [google.maps.Polyline](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polyline.constructor) object
@@ -23,7 +23,7 @@ internal external interface PolylineOptions {
     var geodesic: Boolean
     // TODO: var icons: Array<IconSequence>
     var map: MapView?
-    var path: Array<LatLngJson>
+    var path: Array<JsLatLngLiteral>
     var strokeColor: String
     var strokeOpacity: Double
     var strokeWeight: Int

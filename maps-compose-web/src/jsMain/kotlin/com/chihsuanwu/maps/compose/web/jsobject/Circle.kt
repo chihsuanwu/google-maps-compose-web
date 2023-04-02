@@ -1,6 +1,6 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
-import com.chihsuanwu.maps.compose.web.jsobject.utils.LatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLngLiteral
 
 /**
  * A [google.maps.Circle](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon.constructor) object
@@ -17,7 +17,7 @@ internal fun newCircle(options: CircleOptions): JsCircle {
 }
 
 internal external interface CircleOptions {
-    var center: LatLngJson
+    var center: JsLatLngLiteral
     var clickable: Boolean
     var draggable: Boolean
     var editable: Boolean

@@ -5,7 +5,7 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toJs
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJsonArray
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteralArray
 import js.core.jso
 
 internal class PolygonNode(
@@ -65,7 +65,7 @@ fun Polygon(
         factory = {
             val polygon = newPolygon(
                 jso {
-                    this.paths = points.toLatLngJsonArray()
+                    this.paths = points.toJsLatLngLiteralArray()
                     this.clickable = clickable
                     this.fillColor = fillColor
                     this.fillOpacity = fillOpacity
@@ -84,7 +84,7 @@ fun Polygon(
             PolygonNode(polygon, emptyList(), null)
         },
         update = {
-            set(points) { polygon.setOptions(jso { this.paths = points.toLatLngJsonArray() }) }
+            set(points) { polygon.setOptions(jso { this.paths = points.toJsLatLngLiteralArray() }) }
             set(clickable) { polygon.setOptions(jso { this.clickable = clickable }) }
             set(draggable) { polygon.setOptions(jso { this.draggable = draggable }) }
             set(editable) { polygon.setOptions(jso { this.editable = editable }) }

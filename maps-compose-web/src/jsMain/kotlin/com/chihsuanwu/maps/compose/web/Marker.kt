@@ -2,8 +2,8 @@ package com.chihsuanwu.maps.compose.web
 
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.jsobject.*
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteral
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLng
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJson
 import com.chihsuanwu.maps.compose.web.jsobject.utils.toPointJson
 import js.core.jso
 import kotlinx.browser.document
@@ -194,7 +194,7 @@ private fun MarkerImpl(
         factory = {
             val marker = newMarker(
                 jso {
-                    this.position = state.position.toLatLngJson()
+                    this.position = state.position.toJsLatLngLiteral()
                     this.anchorPoint = anchor?.toPointJson()
                     this.clickable = clickable
                     this.crossOnDrag = crossOnDrag
@@ -218,7 +218,7 @@ private fun MarkerImpl(
             )
         },
         update = {
-            set(state.position) { marker.setOptions(jso { this.position = state.position.toLatLngJson() }) }
+            set(state.position) { marker.setOptions(jso { this.position = state.position.toJsLatLngLiteral() }) }
             set(anchor) {
                 anchor?.let { marker.setOptions(jso { this.anchorPoint = it.toPointJson() }) }
             }

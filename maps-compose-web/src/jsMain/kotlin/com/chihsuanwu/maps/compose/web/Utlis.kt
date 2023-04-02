@@ -6,6 +6,13 @@ class LatLng(
     val lng: Double,
 )
 
+class LatLngBounds(
+    val east: Double,
+    val north: Double,
+    val south: Double,
+    val west: Double,
+)
+
 enum class StrokePosition {
     CENTER,
     INSIDE,

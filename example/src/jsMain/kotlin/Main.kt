@@ -1,5 +1,6 @@
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.*
+import js.core.jso
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -237,9 +238,30 @@ private fun Map(
         }
     }
 
+    val mapOptions = remember {
+        MapOptions(
+            fullscreenControlOptions = FullscreenControlOptions(
+                position = ControlPosition.RightCenter
+            ),
+            mapTypeControl = true,
+            mapTypeControlOptions = MapTypeControlOptions(
+                mapTypeIds = arrayOf(
+                    MapTypeId.Roadmap,
+                    MapTypeId.Satellite,
+                    MapTypeId.Hybrid,
+                    MapTypeId.Terrain,
+                ),
+                position = ControlPosition.TopCenter,
+                style = MapTypeControlStyle.DropdownMenu,
+            ),
+            styles = mapStyle
+        )
+    }
+
     GoogleMap(
         apiKey = apiKey,
         cameraPositionState = cameraPositionState,
+        mapOptions = mapOptions,
         extra = "libraries=geometry", // Required for decoding path from encoded string
         attrs = {
             style {
@@ -340,6 +362,330 @@ private fun Map(
             }
         }
     }
-
 }
 
+val mapStyle = MapTypeStyles(
+    styles = arrayOf(
+        MapTypeStyle(
+            elementType = "geometry",
+            stylers = arrayOf(
+                jso {
+                    color = "#242f3e"
+                }
+            )
+        ),
+        MapTypeStyle(
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#746855"
+                }
+            )
+        ),
+        MapTypeStyle(
+            elementType = "labels.text.stroke",
+            stylers = arrayOf(
+                jso {
+                    color = "#242f3e"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "administrative.locality",
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#d59563"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "poi",
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#d59563"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "poi.park",
+            elementType = "geometry",
+            stylers = arrayOf(
+                jso {
+                    color = "#263c3f"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "poi.park",
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#6b9a76"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "road",
+            elementType = "geometry",
+            stylers = arrayOf(
+                jso {
+                    color = "#38414e"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "road",
+            elementType = "geometry.stroke",
+            stylers = arrayOf(
+                jso {
+                    color = "#212a37"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "road",
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#9ca5b3"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "road.highway",
+            elementType = "geometry",
+            stylers = arrayOf(
+                jso {
+                    color = "#746855"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "road.highway",
+            elementType = "geometry.stroke",
+            stylers = arrayOf(
+                jso {
+                    color = "#1f2835"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "road.highway",
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#f3d19c"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "transit",
+            elementType = "geometry",
+            stylers = arrayOf(
+                jso {
+                    color = "#2f3948"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "transit.station",
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#d59563"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "water",
+            elementType = "geometry",
+            stylers = arrayOf(
+                jso {
+                    color = "#17263c"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "water",
+            elementType = "labels.text.fill",
+            stylers = arrayOf(
+                jso {
+                    color = "#515c6d"
+                }
+            )
+        ),
+        MapTypeStyle(
+            featureType = "water",
+            elementType = "labels.text.stroke",
+            stylers = arrayOf(
+                jso {
+                    color = "#17263c"
+                }
+            )
+        )
+    )
+)
+
+const val mapStyleString = """
+  [{
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#746855"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.locality",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#263c3f"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#6b9a76"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#38414e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#212a37"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9ca5b3"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#746855"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#1f2835"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#f3d19c"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#2f3948"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#515c6d"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  }]
+"""

@@ -39,8 +39,4 @@ internal class MapApplier(
         decorations.forEach { it.onCleared() }
         decorations.clear()
     }
-
-    internal fun attachClickListeners() {
-        // TODO: attach listeners
-    }
 }

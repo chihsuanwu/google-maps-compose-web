@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLngJsonArray
+import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteralArray
 import js.core.jso
 
 internal class PolylineNode(
@@ -58,7 +58,7 @@ fun Polyline(
         factory = {
             val polyline = newPolyline(
                 jso {
-                    this.path = points.toLatLngJsonArray()
+                    this.path = points.toJsLatLngLiteralArray()
                     this.clickable = clickable
                     this.strokeColor = color
                     this.draggable = draggable
@@ -74,7 +74,7 @@ fun Polyline(
             PolylineNode(polyline, emptyList(), null)
         },
         update = {
-            set(points) { polyline.setOptions(jso { this.path = points.toLatLngJsonArray() }) }
+            set(points) { polyline.setOptions(jso { this.path = points.toJsLatLngLiteralArray() }) }
             set(clickable) { polyline.setOptions(jso { this.clickable = clickable }) }
             set(color) { polyline.setOptions(jso { this.strokeColor = color }) }
             set(draggable) { polyline.setOptions(jso { this.draggable = draggable }) }

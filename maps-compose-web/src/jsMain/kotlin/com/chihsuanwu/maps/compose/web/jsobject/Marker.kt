@@ -1,9 +1,8 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
 import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLng
-import com.chihsuanwu.maps.compose.web.jsobject.utils.LatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLngLiteral
 import com.chihsuanwu.maps.compose.web.jsobject.utils.PointJson
-
 
 
 /**
@@ -38,7 +37,7 @@ internal external interface MarkerOptions {
     var map: MapView?
     var opacity: Double
     var optimized: Boolean?
-    var position: LatLngJson
+    var position: JsLatLngLiteral
     // TODO: var shape: MarkerShape
     var title: String?
     var visible: Boolean

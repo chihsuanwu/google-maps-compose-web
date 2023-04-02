@@ -1,6 +1,6 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
-import com.chihsuanwu.maps.compose.web.jsobject.utils.LatLngJson
+import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLngLiteral
 
 /**
  * A [google.maps.Polygon](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon.constructor) object
@@ -24,7 +24,7 @@ internal external interface PolygonOptions {
     var fillOpacity: Double
     var geodesic: Boolean
     var map: MapView?
-    var paths: Array<LatLngJson>
+    var paths: Array<JsLatLngLiteral>
     var strokeColor: String
     var strokeOpacity: Double
     var strokePosition: dynamic
