@@ -44,7 +44,7 @@ internal data class Events(
     val iconChanged: Event.Unit?,
     val idle: Event.Unit?,
     val isFractionalZoomEnabledChanged: Event.Unit?,
-    val maptypeidChanged: Event.Unit?,
+    val mapTypeIdChanged: Event.Unit?,
     val mousedown: Event.Mouse?,
     val mousemove: Event.Mouse?,
     val mouseout: Event.Mouse?,
@@ -54,7 +54,7 @@ internal data class Events(
     val projectionChanged: Event.Unit?,
     val renderingTypeChanged: Event.Unit?,
     val shapeChanged: Event.Unit?,
-    val tilesloaded: Event.Unit?,
+    val tilesLoaded: Event.Unit?,
     val tiltChanged: Event.Unit?,
     val titleChanged: Event.Unit?,
     val visibleChanged: Event.Unit?,
@@ -107,7 +107,7 @@ class EventsBuilder {
         iconChanged = onIconChanged?.let { Event.Unit("icon_changed", it) },
         idle = null,
         isFractionalZoomEnabledChanged = null,
-        maptypeidChanged = null,
+        mapTypeIdChanged = null,
         mousedown = onMouseDown?.let { Event.Mouse("mousedown", it) },
         mousemove = null,
         mouseout = onMouseOut?.let { Event.Mouse("mouseout", it) },
@@ -117,7 +117,7 @@ class EventsBuilder {
         projectionChanged = null,
         renderingTypeChanged = null,
         shapeChanged = onShapeChanged?.let { Event.Unit("shape_changed", it) },
-        tilesloaded = null,
+        tilesLoaded = null,
         tiltChanged = null,
         titleChanged = onTitleChanged?.let { Event.Unit("title_changed", it) },
         visibleChanged = onVisibleChanged?.let { Event.Unit("visible_changed", it) },
@@ -140,13 +140,13 @@ class MapEventsBuilder {
     var onHeadingChanged: ((Unit) -> Unit)? = null
     var onIdle: ((Unit) -> Unit)? = null
     var onIsFractionalZoomEnabledChanged: ((Unit) -> Unit)? = null
-    var onMaptypeidChanged: ((Unit) -> Unit)? = null
+    var onMapTypeIdChanged: ((Unit) -> Unit)? = null
     var onMouseMove: ((e: MouseEvent) -> Unit)? = null
     var onMouseOut: ((e: MouseEvent) -> Unit)? = null
     var onMouseOver: ((e: MouseEvent) -> Unit)? = null
     var onProjectionChanged: ((Unit) -> Unit)? = null
     var onRenderingTypeChanged: ((Unit) -> Unit)? = null
-    var onTilesloaded: ((Unit) -> Unit)? = null
+    var onTilesLoaded: ((Unit) -> Unit)? = null
     var onTiltChanged: ((Unit) -> Unit)? = null
     var onTitleChanged: ((Unit) -> Unit)? = null
     var onZoomChanged: ((Unit) -> Unit)? = null
@@ -171,7 +171,7 @@ class MapEventsBuilder {
         iconChanged = null,
         idle = onIdle?.let { Event.Unit("idle", it) },
         isFractionalZoomEnabledChanged = onIsFractionalZoomEnabledChanged?.let { Event.Unit("isFractionalZoomEnabled_changed", it) },
-        maptypeidChanged = onMaptypeidChanged?.let { Event.Unit("maptypeid_changed", it) },
+        mapTypeIdChanged = onMapTypeIdChanged?.let { Event.Unit("maptypeid_changed", it) },
         mousedown = null,
         mousemove = onMouseMove?.let { Event.Mouse("mousemove", it) },
         mouseout = onMouseOut?.let { Event.Mouse("mouseout", it) },
@@ -181,7 +181,7 @@ class MapEventsBuilder {
         projectionChanged = onProjectionChanged?.let { Event.Unit("projection_changed", it) },
         renderingTypeChanged = onRenderingTypeChanged?.let { Event.Unit("renderingType_changed", it) },
         shapeChanged = null,
-        tilesloaded = onTilesloaded?.let { Event.Unit("tilesloaded", it) },
+        tilesLoaded = onTilesLoaded?.let { Event.Unit("tilesloaded", it) },
         tiltChanged = onTiltChanged?.let { Event.Unit("tilt_changed", it) },
         titleChanged = onTitleChanged?.let { Event.Unit("title_changed", it) },
         visibleChanged = null,
@@ -211,7 +211,7 @@ internal fun <R> Events.map(transform: (Event) -> R): List<R> {
     iconChanged?.let { list.add(transform(it)) }
     idle?.let { list.add(transform(it)) }
     isFractionalZoomEnabledChanged?.let { list.add(transform(it)) }
-    maptypeidChanged?.let { list.add(transform(it)) }
+    mapTypeIdChanged?.let { list.add(transform(it)) }
     mousedown?.let { list.add(transform(it)) }
     mousemove?.let { list.add(transform(it)) }
     mouseout?.let { list.add(transform(it)) }
@@ -221,7 +221,7 @@ internal fun <R> Events.map(transform: (Event) -> R): List<R> {
     projectionChanged?.let { list.add(transform(it)) }
     renderingTypeChanged?.let { list.add(transform(it)) }
     shapeChanged?.let { list.add(transform(it)) }
-    tilesloaded?.let { list.add(transform(it)) }
+    tilesLoaded?.let { list.add(transform(it)) }
     tiltChanged?.let { list.add(transform(it)) }
     titleChanged?.let { list.add(transform(it)) }
     visibleChanged?.let { list.add(transform(it)) }

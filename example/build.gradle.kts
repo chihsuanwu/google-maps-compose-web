@@ -24,6 +24,8 @@ kotlin {
                 implementation(compose.web.core)
                 implementation(compose.runtime)
 
+                implementation("app.softwork:routing-compose:0.2.11")
+
                 implementation(project(":maps-compose-web"))
             }
         }
