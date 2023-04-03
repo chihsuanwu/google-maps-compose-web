@@ -2,9 +2,6 @@ package com.chihsuanwu.maps.compose.web
 
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.jsobject.*
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteral
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLng
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toPointJson
 import js.core.jso
 import kotlinx.browser.document
 import org.jetbrains.compose.web.renderComposable
@@ -62,9 +59,9 @@ class MarkerState(
             markerState.value = value
         }
 
-    var infoContent: (@Composable () -> Unit)? = null
+    internal var infoContent: (@Composable () -> Unit)? = null
 
-    private var infoWindow: InfoWindow? = null
+    private var infoWindow: JsInfoWindow? = null
 
     fun showInfoWindow() {
         if (infoWindow != null) return
@@ -82,7 +79,7 @@ class MarkerState(
             infoContent()
         }
 
-        infoWindow = newInfoWindow().apply {
+        infoWindow = newInfoWindow(jso {}).apply {
             addListener("closeclick") { infoWindow = null }
             setContent(root)
             open(
@@ -195,7 +192,7 @@ private fun MarkerImpl(
             val marker = newMarker(
                 jso {
                     this.position = state.position.toJsLatLngLiteral()
-                    this.anchorPoint = anchor?.toPointJson()
+                    this.anchorPoint = anchor?.toJsPoint()
                     this.clickable = clickable
                     this.crossOnDrag = crossOnDrag
                     this.draggable = draggable
@@ -220,7 +217,7 @@ private fun MarkerImpl(
         update = {
             set(state.position) { marker.setOptions(jso { this.position = state.position.toJsLatLngLiteral() }) }
             set(anchor) {
-                anchor?.let { marker.setOptions(jso { this.anchorPoint = it.toPointJson() }) }
+                anchor?.let { marker.setOptions(jso { this.anchorPoint = it.toJsPoint() }) }
             }
             set(clickable) { marker.setOptions(jso { this.clickable = clickable }) }
             set(crossOnDrag) { marker.setOptions(jso { this.crossOnDrag = crossOnDrag }) }

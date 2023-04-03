@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteralArray
 import js.core.jso
 
 internal class PolylineNode(

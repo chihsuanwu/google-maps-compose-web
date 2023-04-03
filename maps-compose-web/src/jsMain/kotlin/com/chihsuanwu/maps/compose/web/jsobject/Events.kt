@@ -1,8 +1,5 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
-import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLng
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toLatLng
-
 internal external interface MapsEventListener {
     fun remove()
 }

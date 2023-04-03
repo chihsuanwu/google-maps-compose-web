@@ -24,42 +24,46 @@ internal sealed class Event(
  * All events in Google Maps API
  * Each component has its own EventsBuilder to build its own Events.
  */
-internal data class Events(
-    val animationChanged: Event.Unit?,
-    val boundsChanged: Event.Unit?,
-    val centerChanged: Event.Unit?,
-    val clickableChanged: Event.Unit?,
-    val contextMenu: Event.Mouse?,
-    val cursorChanged: Event.Unit?,
-    val dblclick: Event.Mouse?,
-    val drag: Event.Mouse?,
-    val dragend: Event.Mouse?,
-    val draggableChanged: Event.Unit?,
-    val dragStart: Event.Mouse?,
-    val mapDrag: Event.Unit?,
-    val mapDragend: Event.Unit?,
-    val mapDragStart: Event.Unit?,
-    val flatChanged: Event.Unit?,
-    val headingChanged: Event.Unit?,
-    val iconChanged: Event.Unit?,
-    val idle: Event.Unit?,
-    val isFractionalZoomEnabledChanged: Event.Unit?,
-    val mapTypeIdChanged: Event.Unit?,
-    val mousedown: Event.Mouse?,
-    val mousemove: Event.Mouse?,
-    val mouseout: Event.Mouse?,
-    val mouseover: Event.Mouse?,
-    val mouseup: Event.Mouse?,
-    val positionChanged: Event.Unit?,
-    val projectionChanged: Event.Unit?,
-    val renderingTypeChanged: Event.Unit?,
-    val shapeChanged: Event.Unit?,
-    val tilesLoaded: Event.Unit?,
-    val tiltChanged: Event.Unit?,
-    val titleChanged: Event.Unit?,
-    val visibleChanged: Event.Unit?,
-    val zindexChanged: Event.Unit?,
-    val zoomChanged: Event.Unit?,
+internal class Events(
+    val animationChanged: Event.Unit? = null,
+    val boundsChanged: Event.Unit? = null,
+    val centerChanged: Event.Unit? = null,
+    val clickableChanged: Event.Unit? = null,
+    val closeClick: Event.Unit? = null,
+    val contextMenu: Event.Mouse? = null,
+    val contentChanged: Event.Unit? = null,
+    val cursorChanged: Event.Unit? = null,
+    val domReady: Event.Unit? = null,
+    val dblclick: Event.Mouse? = null,
+    val drag: Event.Mouse? = null,
+    val dragend: Event.Mouse? = null,
+    val draggableChanged: Event.Unit? = null,
+    val dragStart: Event.Mouse? = null,
+    val mapDrag: Event.Unit? = null,
+    val mapDragend: Event.Unit? = null,
+    val mapDragStart: Event.Unit? = null,
+    val flatChanged: Event.Unit? = null,
+    val headingChanged: Event.Unit? = null,
+    val iconChanged: Event.Unit? = null,
+    val idle: Event.Unit? = null,
+    val isFractionalZoomEnabledChanged: Event.Unit? = null,
+    val mapTypeIdChanged: Event.Unit? = null,
+    val mousedown: Event.Mouse? = null,
+    val mousemove: Event.Mouse? = null,
+    val mouseout: Event.Mouse? = null,
+    val mouseover: Event.Mouse? = null,
+    val mouseup: Event.Mouse? = null,
+    val positionChanged: Event.Unit? = null,
+    val projectionChanged: Event.Unit? = null,
+    val renderingTypeChanged: Event.Unit? = null,
+    val shapeChanged: Event.Unit? = null,
+    val tilesLoaded: Event.Unit? = null,
+    val tiltChanged: Event.Unit? = null,
+    val titleChanged: Event.Unit? = null,
+    val visible: Event.Unit? = null,
+    val visibleChanged: Event.Unit? = null,
+    val zIndexChanged: Event.Unit? = null,
+    val zoomChanged: Event.Unit? = null,
 )
 
 /**
@@ -90,8 +94,6 @@ class EventsBuilder {
     internal fun build() = Events(
         animationChanged = onAnimationChanged?.let { Event.Unit("animation_changed", it) },
         boundsChanged = onClickableChanged?.let { Event.Unit("clickable_changed", it) },
-        centerChanged = null,
-        clickableChanged = null,
         contextMenu = onContextMenu?.let { Event.Mouse("contextmenu", it) },
         cursorChanged = onCursorChanged?.let { Event.Unit("cursor_changed", it) },
         dblclick = onDoubleClick?.let { Event.Mouse("dblclick", it) },
@@ -99,30 +101,17 @@ class EventsBuilder {
         dragend = onDragEnd?.let { Event.Mouse("dragend", it) },
         draggableChanged = onDraggableChanged?.let { Event.Unit("draggable_changed", it) },
         dragStart = onDragStart?.let { Event.Mouse("dragstart", it) },
-        mapDrag = null,
-        mapDragend = null,
-        mapDragStart = null,
         flatChanged = onFlatChanged?.let { Event.Unit("flat_changed", it) },
-        headingChanged = null,
         iconChanged = onIconChanged?.let { Event.Unit("icon_changed", it) },
-        idle = null,
-        isFractionalZoomEnabledChanged = null,
-        mapTypeIdChanged = null,
         mousedown = onMouseDown?.let { Event.Mouse("mousedown", it) },
-        mousemove = null,
         mouseout = onMouseOut?.let { Event.Mouse("mouseout", it) },
         mouseover = onMouseOver?.let { Event.Mouse("mouseover", it) },
         mouseup = onMouseUp?.let { Event.Mouse("mouseup", it) },
         positionChanged = onPositionChanged?.let { Event.Unit("position_changed", it) },
-        projectionChanged = null,
-        renderingTypeChanged = null,
         shapeChanged = onShapeChanged?.let { Event.Unit("shape_changed", it) },
-        tilesLoaded = null,
-        tiltChanged = null,
         titleChanged = onTitleChanged?.let { Event.Unit("title_changed", it) },
         visibleChanged = onVisibleChanged?.let { Event.Unit("visible_changed", it) },
-        zindexChanged = onZIndexChanged?.let { Event.Unit("zindex_changed", it) },
-        zoomChanged = null,
+        zIndexChanged = onZIndexChanged?.let { Event.Unit("zindex_changed", it) },
     )
 }
 
@@ -152,41 +141,47 @@ class MapEventsBuilder {
     var onZoomChanged: ((Unit) -> Unit)? = null
 
     internal fun build() = Events(
-        animationChanged = null,
         boundsChanged = onBoundsChanged?.let { Event.Unit("bounds_changed", it) },
         centerChanged = onCenterChanged?.let { Event.Unit("center_changed", it) },
-        clickableChanged = null,
         contextMenu = onContextMenu?.let { Event.Mouse("contextmenu", it) },
-        cursorChanged = null,
         dblclick = onDoubleClick?.let { Event.Mouse("dblclick", it) },
-        drag = null,
-        dragend = null,
-        draggableChanged = null,
-        dragStart = null,
         mapDrag = onDrag?.let { Event.Unit("drag", it) },
         mapDragend = onDragEnd?.let { Event.Unit("dragend", it) },
         mapDragStart = onDragStart?.let { Event.Unit("dragstart", it) },
-        flatChanged = null,
         headingChanged = onHeadingChanged?.let { Event.Unit("heading_changed", it) },
-        iconChanged = null,
         idle = onIdle?.let { Event.Unit("idle", it) },
         isFractionalZoomEnabledChanged = onIsFractionalZoomEnabledChanged?.let { Event.Unit("isFractionalZoomEnabled_changed", it) },
         mapTypeIdChanged = onMapTypeIdChanged?.let { Event.Unit("maptypeid_changed", it) },
-        mousedown = null,
         mousemove = onMouseMove?.let { Event.Mouse("mousemove", it) },
         mouseout = onMouseOut?.let { Event.Mouse("mouseout", it) },
         mouseover = onMouseOver?.let { Event.Mouse("mouseover", it) },
-        mouseup = null,
-        positionChanged = null,
         projectionChanged = onProjectionChanged?.let { Event.Unit("projection_changed", it) },
         renderingTypeChanged = onRenderingTypeChanged?.let { Event.Unit("renderingType_changed", it) },
-        shapeChanged = null,
         tilesLoaded = onTilesLoaded?.let { Event.Unit("tilesloaded", it) },
         tiltChanged = onTiltChanged?.let { Event.Unit("tilt_changed", it) },
         titleChanged = onTitleChanged?.let { Event.Unit("title_changed", it) },
-        visibleChanged = null,
-        zindexChanged = null,
         zoomChanged = onZoomChanged?.let { Event.Unit("zoom_changed", it) },
+    )
+}
+
+/**
+ * EventsBuilder for [InfoWindow]
+ */
+class InfoWindowEventsBuilder {
+    var onCloseClick: ((Unit) -> Unit)? = null
+    var onContentChanged: ((Unit) -> Unit)? = null
+    var onDomReady: ((Unit) -> Unit)? = null
+    var onPositionChanged: ((Unit) -> Unit)? = null
+    val onVisible: ((Unit) -> Unit)? = null
+    var onZIndexChanged: ((Unit) -> Unit)? = null
+
+    internal fun build() = Events(
+        closeClick = onCloseClick?.let { Event.Unit("closeclick", it) },
+        contentChanged = onContentChanged?.let { Event.Unit("content_changed", it) },
+        domReady = onDomReady?.let { Event.Unit("domready", it) },
+        positionChanged = onPositionChanged?.let { Event.Unit("position_changed", it) },
+        visible = onVisible?.let { Event.Unit("visible", it) },
+        zIndexChanged = onZIndexChanged?.let { Event.Unit("zindex_changed", it) },
     )
 }
 
@@ -196,9 +191,12 @@ internal fun <R> Events.map(transform: (Event) -> R): List<R> {
     boundsChanged?.let { list.add(transform(it)) }
     centerChanged?.let { list.add(transform(it)) }
     clickableChanged?.let { list.add(transform(it)) }
+    closeClick?.let { list.add(transform(it)) }
     contextMenu?.let { list.add(transform(it)) }
+    contentChanged?.let { list.add(transform(it)) }
     cursorChanged?.let { list.add(transform(it)) }
     dblclick?.let { list.add(transform(it)) }
+    domReady?.let { list.add(transform(it)) }
     drag?.let { list.add(transform(it)) }
     dragend?.let { list.add(transform(it)) }
     draggableChanged?.let { list.add(transform(it)) }
@@ -224,8 +222,9 @@ internal fun <R> Events.map(transform: (Event) -> R): List<R> {
     tilesLoaded?.let { list.add(transform(it)) }
     tiltChanged?.let { list.add(transform(it)) }
     titleChanged?.let { list.add(transform(it)) }
+    visible?.let { list.add(transform(it)) }
     visibleChanged?.let { list.add(transform(it)) }
-    zindexChanged?.let { list.add(transform(it)) }
+    zIndexChanged?.let { list.add(transform(it)) }
     zoomChanged?.let { list.add(transform(it)) }
     return list
 }

@@ -4,9 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toJs
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteralArray
 import js.core.jso
+
+enum class StrokePosition {
+    CENTER,
+    INSIDE,
+    OUTSIDE
+}
 
 internal class PolygonNode(
     val polygon: JsPolygon,

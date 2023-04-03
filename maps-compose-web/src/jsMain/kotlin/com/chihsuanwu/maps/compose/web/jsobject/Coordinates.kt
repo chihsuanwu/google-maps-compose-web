@@ -1,7 +1,9 @@
-package com.chihsuanwu.maps.compose.web.jsobject.utils
+package com.chihsuanwu.maps.compose.web.jsobject
 
 import com.chihsuanwu.maps.compose.web.LatLng
 import com.chihsuanwu.maps.compose.web.LatLngBounds
+import com.chihsuanwu.maps.compose.web.Point
+import com.chihsuanwu.maps.compose.web.Size
 import js.core.jso
 
 /**
@@ -54,5 +56,35 @@ internal fun LatLngBounds.toJsLatLngBounds(): JsLatLngBoundsLiteral {
         north = this@toJsLatLngBounds.north
         south = this@toJsLatLngBounds.south
         west = this@toJsLatLngBounds.west
+    }
+}
+
+/**
+ * A [google.maps.Point](https://developers.google.com/maps/documentation/javascript/reference/coordinates#Point)
+ */
+internal external interface JsPoint {
+    var x: Double
+    var y: Double
+}
+
+internal fun Point.toJsPoint(): JsPoint {
+    return jso {
+        x = this@toJsPoint.x
+        y = this@toJsPoint.y
+    }
+}
+
+/**
+ * A [google.maps.Size](https://developers.google.com/maps/documentation/javascript/reference/coordinates#Size)
+ */
+internal external interface JsSize {
+    var height: Double
+    var width: Double
+}
+
+internal fun Size.toJsSize(): JsSize {
+    return jso {
+        height = this@toJsSize.height
+        width = this@toJsSize.width
     }
 }

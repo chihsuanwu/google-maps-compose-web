@@ -1,23 +1,14 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
-import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLng
-import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLngLiteral
-import com.chihsuanwu.maps.compose.web.jsobject.utils.PointJson
-
 
 /**
  * A [google.maps.Marker](https://developers.google.com/maps/documentation/javascript/reference/marker#Marker.constructor) object
  */
-internal external interface JsMarker : AddListener {
+internal external interface JsMarker : JsLatLng, AddListener {
 
     fun setMap(map: MapView?)
-
     fun setOptions(options: MarkerOptions)
-
-//    fun addListener(event: String, callback: (Any) -> Unit)
-
     fun getMap(): MapView
-
     fun getPosition(): JsLatLng
 }
 
@@ -26,7 +17,7 @@ internal fun newMarker(options: MarkerOptions): JsMarker {
 }
 
 internal external interface MarkerOptions {
-    var anchorPoint: PointJson?
+    var anchorPoint: JsPoint?
     var animation: dynamic
     var clickable: Boolean
     var crossOnDrag: Boolean

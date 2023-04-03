@@ -1,9 +1,6 @@
 package com.chihsuanwu.maps.compose.web.jsobject
 
 import com.chihsuanwu.maps.compose.web.*
-import com.chihsuanwu.maps.compose.web.jsobject.utils.*
-import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLng
-import com.chihsuanwu.maps.compose.web.jsobject.utils.JsLatLngLiteral
 import js.core.jso
 
 

@@ -13,13 +13,12 @@ class LatLngBounds(
     val west: Double,
 )
 
-enum class StrokePosition {
-    CENTER,
-    INSIDE,
-    OUTSIDE
-}
-
 class Point(
     val x: Double,
     val y: Double
+)
+
+class Size(
+    val height: Double,
+    val width: Double
 )

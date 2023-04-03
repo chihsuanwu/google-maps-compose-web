@@ -4,8 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toJs
-import com.chihsuanwu.maps.compose.web.jsobject.utils.toJsLatLngLiteral
 import js.core.jso
 
 internal class CircleNode(

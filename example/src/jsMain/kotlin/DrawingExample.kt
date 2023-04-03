@@ -20,6 +20,9 @@ fun DrawingExample(
     var polyline: List<LatLng> by remember { mutableStateOf(emptyList()) }
     var polygon: List<LatLng> by remember { mutableStateOf(emptyList()) }
     var markers: List<MarkerState> by remember { mutableStateOf(emptyList()) }
+    val infoWindowState: InfoWindowState = remember { InfoWindowState(
+        LatLng(23.5, 120.8),
+    ) }
 
     Div(
         attrs = {
@@ -127,6 +130,19 @@ fun DrawingExample(
         ) {
             Text("Clear Markers")
         }
+
+        Button(
+            attrs = {
+                style {
+                    marginLeft(10.px)
+                }
+                onClick {
+                    infoWindowState.showInfoWindow()
+                }
+            }
+        ) {
+            Text("Show InfoWindow")
+        }
     }
 
     GoogleMap(
@@ -214,6 +230,41 @@ fun DrawingExample(
                     }) {
                         Text("Close")
                     }
+                }
+            }
+        }
+
+        InfoWindow(
+            state = infoWindowState
+        ) {
+            Div(
+                attrs = {
+                    style {
+                        backgroundColor(Color("#0066BB"))
+                        padding(5.px)
+                        borderRadius(5.px)
+                    }
+                }
+            ) {
+                Span({
+                    style {
+                        color(Color("#FFFFFF"))
+                        fontWeight("bold")
+                    }
+                }) {
+                    Text("Hello, InfoWindow ${infoWindowState.position.asString()}!")
+                }
+
+                Button({
+                    style {
+                        color(Color("#FFCC00"))
+                        marginLeft(10.px)
+                    }
+                    onClick {
+                        infoWindowState.hideInfoWindow()
+                    }
+                }) {
+                    Text("Close")
                 }
             }
         }
