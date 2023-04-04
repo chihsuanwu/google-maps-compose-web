@@ -8,8 +8,7 @@ import js.core.jso
 
 internal class CircleNode(
     val circle: JsCircle,
-    var events: List<MapsEventListener>,
-    var onClick: MapsEventListener?,
+    var events: MutableMap<String, MapsEventListener>
 ) : MapNode {
     override fun onRemoved() {
         circle.setMap(null)
@@ -33,8 +32,19 @@ internal class CircleNode(
  * @param visible Whether this circle is visible on the map.
  * @param zIndex The zIndex compared to other circles.
  *
- * @param events The events to be applied to the circle.
+ * @param onCenterChanged A callback to be invoked when the circle center is changed.
  * @param onClick A callback to be invoked when the circle is clicked.
+ * @param onDoubleClick A callback to be invoked when the circle is double-clicked.
+ * @param onDrag A callback to be invoked repeatedly while the user drags the circle.
+ * @param onDragEnd A callback to be invoked when the user stops dragging the circle.
+ * @param onDragStart A callback to be invoked when the user starts dragging the circle.
+ * @param onMouseDown A callback to be invoked when the DOM mousedown event is fired on the circle.
+ * @param onMouseMove A callback to be invoked when the DOM mousemove event is fired on the circle.
+ * @param onMouseOut A callback to be invoked when the mouseout event is fired on the circle.
+ * @param onMouseOver A callback to be invoked when the mouseover event is fired on the circle.
+ * @param onMouseUp A callback to be invoked when the DOM mouseup event is fired on the circle.
+ * @param onRadiusChanged A callback to be invoked when the circle radius is changed.
+ * @param onRightClick A callback to be invoked when the circle is right-clicked.
  */
 @Composable
 fun Circle(
@@ -51,8 +61,19 @@ fun Circle(
     strokePosition: StrokePosition = StrokePosition.CENTER,
     visible: Boolean = true,
     zIndex: Double? = null,
-    events: EventsBuilder.() -> Unit = {},
-    onClick: (MouseEvent) -> Unit = {},
+    onCenterChanged: () -> Unit = {},
+    onClick: (MapMouseEvent) -> Unit = {},
+    onDoubleClick: (MapMouseEvent) -> Unit = {},
+    onDrag: (MapMouseEvent) -> Unit = {},
+    onDragEnd: (MapMouseEvent) -> Unit = {},
+    onDragStart: (MapMouseEvent) -> Unit = {},
+    onMouseDown: (MapMouseEvent) -> Unit = {},
+    onMouseMove: (MapMouseEvent) -> Unit = {},
+    onMouseOut: (MapMouseEvent) -> Unit = {},
+    onMouseOver: (MapMouseEvent) -> Unit = {},
+    onMouseUp: (MapMouseEvent) -> Unit = {},
+    onRadiusChanged: () -> Unit = {},
+    onRightClick: (MapMouseEvent) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<CircleNode, MapApplier>(
@@ -75,7 +96,7 @@ fun Circle(
                     this.zIndex = zIndex
                 }
             )
-            CircleNode(circle, emptyList(), null)
+            CircleNode(circle, mutableMapOf())
         },
         update = {
             set(center) { circle.setOptions(jso { this.center = center.toJsLatLngLiteral() }) }
@@ -92,18 +113,70 @@ fun Circle(
             set(visible) { circle.setOptions(jso { this.visible = visible }) }
             set(zIndex) { circle.setOptions(jso { this.zIndex = zIndex }) }
 
-            set(events) {
-                this.events.forEach { it.remove() }
-                this.events = EventsBuilder().apply(events).build().map { e ->
-                    when (e) {
-                        is Event.Unit -> circle.addListener(e.event) { e.callback(it) }
-                        is Event.Mouse -> circle.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
-                    }
-                }
+            set(onCenterChanged) {
+                val eventName = "center_changed"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onCenterChanged() }
             }
             set(onClick) {
-                this.onClick?.remove()
-                this.onClick = circle.addListener("click") { onClick((it as MapMouseEvent).toMouseEvent()) }
+                val eventName = "click"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onClick((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDoubleClick) {
+                val eventName = "dblclick"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onDoubleClick((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDrag) {
+                val eventName = "drag"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onDrag((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDragEnd) {
+                val eventName = "dragend"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onDragEnd((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDragStart) {
+                val eventName = "dragstart"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onDragStart((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onMouseDown) {
+                val eventName = "mousedown"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onMouseDown((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onMouseMove) {
+                val eventName = "mousemove"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onMouseMove((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onMouseOut) {
+                val eventName = "mouseout"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onMouseOut((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onMouseOver) {
+                val eventName = "mouseover"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onMouseOver((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onMouseUp) {
+                val eventName = "mouseup"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onMouseUp((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onRadiusChanged) {
+                val eventName = "radius_changed"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onRadiusChanged() }
+            }
+            set(onRightClick) {
+                val eventName = "rightclick"
+                events[eventName]?.remove()
+                events[eventName] = circle.addListener(eventName) { onRightClick((it as JsMapMouseEvent).toMouseEvent()) }
             }
         }
     )

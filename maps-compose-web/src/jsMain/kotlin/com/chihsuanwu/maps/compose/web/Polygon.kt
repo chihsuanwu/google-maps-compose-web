@@ -14,8 +14,7 @@ enum class StrokePosition {
 
 internal class PolygonNode(
     val polygon: JsPolygon,
-    var events: List<MapsEventListener>,
-    var onClick: MapsEventListener?,
+    var events: MutableMap<String, MapsEventListener>,
 ) : MapNode {
     override fun onRemoved() {
         polygon.setMap(null)
@@ -26,6 +25,7 @@ internal class PolygonNode(
  * A composable for a polygon on the map.
  *
  * @param points The points of the polygon.
+ *
  * @param clickable Indicates whether this Polygon handles mouse events.
  * @param draggable If set to true, the user can drag this shape over the map.
  * The geodesic property defines the mode of dragging.
@@ -43,8 +43,18 @@ internal class PolygonNode(
  * @param visible Whether this polygon is visible on the map.
  * @param zIndex The zIndex compared to other polys.
  *
- * @param events The events to be applied to the polygon.
  * @param onClick A callback to be invoked when the polygon is clicked.
+ * @param onContextMenu A callback to be invoked when the DOM contextmenu event is fired on the polygon.
+ * @param onDoubleClick A callback to be invoked when the polygon is double-clicked.
+ * @param onDrag A callback to be invoked repeatedly while the user drags the polygon.
+ * @param onDragEnd A callback to be invoked when the user stops dragging the polygon.
+ * @param onDragStart A callback to be invoked when the user stops dragging the polygon.
+ * @param onMouseDown A callback to be invoked when the DOM mousedown event is fired on the polygon.
+ * @param onMouseMove A callback to be invoked when the DOM mousemove event is fired on the polygon.
+ * @param onMouseOut A callback to be invoked when the mouseout event is fired.
+ * @param onMouseOver A callback to be invoked when the mouseover event is fired.
+ * @param onMouseUp A callback to be invoked when the DOM mouseup event is fired.
+ *
  */
 @Composable
 fun Polygon(
@@ -61,8 +71,17 @@ fun Polygon(
     strokePosition: StrokePosition = StrokePosition.CENTER,
     visible: Boolean = true,
     zIndex: Double? = null,
-    events: EventsBuilder.() -> Unit = {},
-    onClick: (MouseEvent) -> Unit = {},
+    onClick: (PolyMouseEvent) -> Unit = {},
+    onContextMenu: (PolyMouseEvent) -> Unit = {},
+    onDoubleClick: (PolyMouseEvent) -> Unit = {},
+    onDrag: (MapMouseEvent) -> Unit = {},
+    onDragEnd: (MapMouseEvent) -> Unit = {},
+    onDragStart: (MapMouseEvent) -> Unit = {},
+    onMouseDown: (PolyMouseEvent) -> Unit = {},
+    onMouseMove: (PolyMouseEvent) -> Unit = {},
+    onMouseOut: (PolyMouseEvent) -> Unit = {},
+    onMouseOver: (PolyMouseEvent) -> Unit = {},
+    onMouseUp: (PolyMouseEvent) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<PolygonNode, MapApplier>(
@@ -85,7 +104,7 @@ fun Polygon(
                     this.zIndex = zIndex
                 }
             )
-            PolygonNode(polygon, emptyList(), null)
+            PolygonNode(polygon, mutableMapOf())
         },
         update = {
             set(points) { polygon.setOptions(jso { this.paths = points.toJsLatLngLiteralArray() }) }
@@ -102,18 +121,60 @@ fun Polygon(
             set(visible) { polygon.setOptions(jso { this.visible = visible }) }
             set(zIndex) { polygon.setOptions(jso { this.zIndex = zIndex }) }
 
-            set(events) {
-                this.events.forEach { it.remove() }
-                this.events = EventsBuilder().apply(events).build().map { e ->
-                    when (e) {
-                        is Event.Unit -> polygon.addListener(e.event) { e.callback(it) }
-                        is Event.Mouse -> polygon.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
-                    }
-                }
-            }
             set(onClick) {
-                this.onClick?.remove()
-                this.onClick = polygon.addListener("click") { onClick((it as MapMouseEvent).toMouseEvent()) }
+                val eventName = "click"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onClick((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onContextMenu) {
+                val eventName = "contextmenu"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onContextMenu((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onDoubleClick) {
+                val eventName = "dblclick"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onDoubleClick((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onDrag) {
+                val eventName = "drag"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onDrag((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDragEnd) {
+                val eventName = "dragend"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onDragEnd((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDragStart) {
+                val eventName = "dragstart"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onDragStart((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onMouseDown) {
+                val eventName = "mousedown"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onMouseDown((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseMove) {
+                val eventName = "mousemove"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onMouseMove((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseOut) {
+                val eventName = "mouseout"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onMouseOut((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseOver) {
+                val eventName = "mouseover"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onMouseOver((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseUp) {
+                val eventName = "mouseup"
+                events[eventName]?.remove()
+                events[eventName] = polygon.addListener(eventName) { onMouseUp((it as JsPolyMouseEvent).toPolyMouseEvent()) }
             }
         }
     )

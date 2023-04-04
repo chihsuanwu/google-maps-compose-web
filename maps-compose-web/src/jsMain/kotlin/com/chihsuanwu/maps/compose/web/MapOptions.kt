@@ -50,7 +50,7 @@ data class MapOptions(
  * See [MapTypeStyle](https://developers.google.com/maps/documentation/javascript/reference/map#MapTypeStyle)
  * for more details
  */
-data class MapTypeStyles(
+class MapTypeStyles(
     internal val styles: Array<MapTypeStyle>,
 ) {
     companion object {
@@ -70,7 +70,7 @@ data class MapTypeStyles(
     }
 }
 
-data class MapTypeStyle(
+class MapTypeStyle(
     val elementType: String? = null,
     val featureType: String? = null,
     val stylers: Array<dynamic>? = null,
@@ -90,7 +90,7 @@ enum class MapTypeId {
  * See [FullscreenControlOptions](https://developers.google.com/maps/documentation/javascript/reference/control#FullscreenControlOptions)
  * for more details
  */
-data class FullscreenControlOptions(
+class FullscreenControlOptions(
     val position: ControlPosition? = null,
 )
 
@@ -100,7 +100,7 @@ data class FullscreenControlOptions(
  * See [MapTypeControlOptions](https://developers.google.com/maps/documentation/javascript/reference/control#MapTypeControlOptions)
  * for more details
  */
-data class MapTypeControlOptions(
+class MapTypeControlOptions(
     val mapTypeIds: Array<MapTypeId>? = null,
     val position: ControlPosition? = null,
     val style: MapTypeControlStyle? = null,
@@ -122,7 +122,7 @@ enum class MapTypeControlStyle {
  * See [PanControlOptions](https://developers.google.com/maps/documentation/javascript/reference/control#PanControlOptions)
  * for more details
  */
-data class PanControlOptions(
+class PanControlOptions(
     val position: ControlPosition? = null,
 )
 
@@ -132,7 +132,7 @@ data class PanControlOptions(
  * See [RotateControlOptions](https://developers.google.com/maps/documentation/javascript/reference/control#RotateControlOptions)
  * for more details
  */
-data class RotateControlOptions(
+class RotateControlOptions(
     val position: ControlPosition? = null,
 )
 
@@ -142,7 +142,7 @@ data class RotateControlOptions(
  * See [StreetViewControlOptions](https://developers.google.com/maps/documentation/javascript/reference/control#StreetViewControlOptions)
  * for more details
  */
-data class StreetViewControlOptions(
+class StreetViewControlOptions(
     val position: ControlPosition? = null,
 )
 
@@ -152,7 +152,7 @@ data class StreetViewControlOptions(
  * See [ZoomControlOptions](https://developers.google.com/maps/documentation/javascript/reference/control#ZoomControlOptions)
  * for more details
  */
-data class ZoomControlOptions(
+class ZoomControlOptions(
     val position: ControlPosition? = null
 )
 

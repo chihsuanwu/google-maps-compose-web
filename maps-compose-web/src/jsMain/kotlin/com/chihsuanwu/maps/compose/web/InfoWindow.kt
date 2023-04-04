@@ -7,6 +7,30 @@ import js.core.jso
 import kotlinx.browser.document
 import org.jetbrains.compose.web.renderComposable
 
+
+internal class InfoWindowNode(
+    val infoWindow: JsInfoWindow,
+    val infoWindowState: InfoWindowState,
+    val map: MapView?,
+    var events: MutableMap<String, MapsEventListener>,
+) : MapNode {
+    override fun onAttached() {
+        infoWindowState.infoWindow = infoWindow
+        infoWindowState.map = map
+    }
+
+    override fun onRemoved() {
+        infoWindowState.infoWindow = null
+        infoWindow.close()
+    }
+
+    override fun onCleared() {
+        infoWindowState.infoWindow = null
+        infoWindow.close()
+    }
+}
+
+
 /**
  * A state object that can be hoisted to control and observe the info window state.
  *
@@ -39,28 +63,6 @@ class InfoWindowState(
     }
 }
 
-internal class InfoWindowNode(
-    val infoWindow: JsInfoWindow,
-    val infoWindowState: InfoWindowState,
-    val map: MapView?,
-    var events: List<MapsEventListener>,
-) : MapNode {
-    override fun onAttached() {
-        infoWindowState.infoWindow = infoWindow
-        infoWindowState.map = map
-    }
-
-    override fun onRemoved() {
-        infoWindowState.infoWindow = null
-        infoWindow.close()
-    }
-
-    override fun onCleared() {
-        infoWindowState.infoWindow = null
-        infoWindow.close()
-    }
-}
-
 /**
  * A composable that represents a Google Maps InfoWindow.
  *
@@ -73,7 +75,8 @@ internal class InfoWindowNode(
  * at whose geographical coordinates the InfoWindow is anchored.
  * @param zIndex The zIndex compared to other windows.
  *
- * @param events The events to be applied to the InfoWindow.
+ *
+ *
  * @param content The content of the InfoWindow.
  */
 @Composable
@@ -85,7 +88,12 @@ fun InfoWindow(
     minWidth: Int? = null,
     pixelOffset: Size? = null,
     zIndex: Double? = null,
-    events: InfoWindowEventsBuilder.() -> Unit = {},
+    onCloseClick: () -> Unit = {},
+    onContentChanged: () -> Unit = {},
+    onDOMReady: () -> Unit = {},
+    onPositionChanged: () -> Unit = {},
+    onVisible: () -> Unit = {},
+    onZIndexChanged: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
@@ -107,7 +115,7 @@ fun InfoWindow(
                 }
             )
             infoWindow.setContent(root)
-            InfoWindowNode(infoWindow, state, mapApplier?.map, emptyList())
+            InfoWindowNode(infoWindow, state, mapApplier?.map, mutableMapOf())
         },
         update = {
             set(state.position) { infoWindow.setOptions(jso { this.position = state.position.toJsLatLngLiteral() }) }
@@ -118,14 +126,35 @@ fun InfoWindow(
             set(pixelOffset) { infoWindow.setOptions(jso { this.pixelOffset = pixelOffset?.toJsSize() }) }
             set(zIndex) { infoWindow.setOptions(jso { this.zIndex = zIndex }) }
 
-            set(events) {
-                this.events.forEach { it.remove() }
-                this.events = InfoWindowEventsBuilder().apply(events).build().map { e ->
-                    when (e) {
-                        is Event.Unit -> infoWindow.addListener(e.event) { e.callback(it) }
-                        is Event.Mouse -> infoWindow.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
-                    }
-                }
+            set(onCloseClick) {
+                val eventName = "closeclick"
+                events[eventName]?.remove()
+                events[eventName] = infoWindow.addListener(eventName) { onCloseClick() }
+            }
+            set(onContentChanged) {
+                val eventName = "content_changed"
+                events[eventName]?.remove()
+                events[eventName] = infoWindow.addListener(eventName) { onContentChanged() }
+            }
+            set(onDOMReady) {
+                val eventName = "domready"
+                events[eventName]?.remove()
+                events[eventName] = infoWindow.addListener(eventName) { onDOMReady() }
+            }
+            set(onPositionChanged) {
+                val eventName = "position_changed"
+                events[eventName]?.remove()
+                events[eventName] = infoWindow.addListener(eventName) { onPositionChanged() }
+            }
+            set(onVisible) {
+                val eventName = "visible"
+                events[eventName]?.remove()
+                events[eventName] = infoWindow.addListener(eventName) { onVisible() }
+            }
+            set(onZIndexChanged) {
+                val eventName = "zindex_changed"
+                events[eventName]?.remove()
+                events[eventName] = infoWindow.addListener(eventName) { onZIndexChanged() }
             }
         }
     )

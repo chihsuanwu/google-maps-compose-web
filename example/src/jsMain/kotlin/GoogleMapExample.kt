@@ -36,8 +36,6 @@ data class MapListenerState(
 fun MapExample(
     apiKey: String,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     var mapListenerState: MapListenerState by remember { mutableStateOf(MapListenerState()) }
 
     val cameraPositionState = rememberCameraPositionState  {
@@ -117,68 +115,64 @@ fun MapExample(
                     width(90.percent)
                 }
             },
-            events = {
-                onBoundsChanged = {
-                    mapListenerState = mapListenerState.copy(boundsChanged = mapListenerState.boundsChanged + 1)
-                }
-                onCenterChanged = {
-                    mapListenerState = mapListenerState.copy(centerChanged = mapListenerState.centerChanged + 1)
-                }
-                onContextMenu = {
-                    mapListenerState = mapListenerState.copy(contextMenu = mapListenerState.contextMenu + 1)
-                }
-                onDoubleClick = {
-                    mapListenerState = mapListenerState.copy(dblClick = mapListenerState.dblClick + 1)
-                }
-                onDrag = {
-                    mapListenerState = mapListenerState.copy(drag = mapListenerState.drag + 1)
-                }
-                onDragEnd = {
-                    mapListenerState = mapListenerState.copy(dragEnd = mapListenerState.dragEnd + 1)
-                }
-                onDragStart = {
-                    mapListenerState = mapListenerState.copy(dragStart = mapListenerState.dragStart + 1)
-                }
-                onHeadingChanged = {
-                    mapListenerState = mapListenerState.copy(headingChanged = mapListenerState.headingChanged + 1)
-                }
-                onIdle = {
-                    mapListenerState = mapListenerState.copy(idle = mapListenerState.idle + 1)
-                }
-                onMapTypeIdChanged = {
-                    mapListenerState = mapListenerState.copy(mapTypeIdChanged = mapListenerState.mapTypeIdChanged + 1)
-                }
-                onMouseMove = {
-                    mapListenerState = mapListenerState.copy(mouseMove = mapListenerState.mouseMove + 1)
-                }
-                onMouseOut = {
-                    mapListenerState = mapListenerState.copy(mouseOut = mapListenerState.mouseOut + 1)
-                }
-                onMouseOver = {
-                    mapListenerState = mapListenerState.copy(mouseOver = mapListenerState.mouseOver + 1)
-                }
-                onProjectionChanged = {
-                    mapListenerState = mapListenerState.copy(projectionChanged = mapListenerState.projectionChanged + 1)
-                }
-                onRenderingTypeChanged = {
-                    mapListenerState = mapListenerState.copy(renderingTypeChanged = mapListenerState.renderingTypeChanged + 1)
-                }
-                onTilesLoaded = {
-                    mapListenerState = mapListenerState.copy(tilesLoaded = mapListenerState.tilesLoaded + 1)
-                }
-                onTiltChanged = {
-                    mapListenerState = mapListenerState.copy(tiltChanged = mapListenerState.tiltChanged + 1)
-                }
-                onZoomChanged = {
-                    mapListenerState = mapListenerState.copy(zoomChanged = mapListenerState.zoomChanged + 1)
-                }
+            onBoundsChanged = {
+                mapListenerState = mapListenerState.copy(boundsChanged = mapListenerState.boundsChanged + 1)
+            },
+            onCenterChanged = {
+                mapListenerState = mapListenerState.copy(centerChanged = mapListenerState.centerChanged + 1)
             },
             onClick = {
                 mapListenerState = mapListenerState.copy(click = mapListenerState.click + 1)
-            }
-        ) {
-
-        }
+            },
+            onContextMenu = {
+                mapListenerState = mapListenerState.copy(contextMenu = mapListenerState.contextMenu + 1)
+            },
+            onDoubleClick = {
+                mapListenerState = mapListenerState.copy(dblClick = mapListenerState.dblClick + 1)
+            },
+            onDrag = {
+                mapListenerState = mapListenerState.copy(drag = mapListenerState.drag + 1)
+            },
+            onDragEnd = {
+                mapListenerState = mapListenerState.copy(dragEnd = mapListenerState.dragEnd + 1)
+            },
+            onDragStart = {
+                mapListenerState = mapListenerState.copy(dragStart = mapListenerState.dragStart + 1)
+            },
+            onHeadingChanged = {
+                mapListenerState = mapListenerState.copy(headingChanged = mapListenerState.headingChanged + 1)
+            },
+            onIdle = {
+                mapListenerState = mapListenerState.copy(idle = mapListenerState.idle + 1)
+            },
+            onMapTypeIdChanged = {
+                mapListenerState = mapListenerState.copy(mapTypeIdChanged = mapListenerState.mapTypeIdChanged + 1)
+            },
+            onMouseMove = {
+                mapListenerState = mapListenerState.copy(mouseMove = mapListenerState.mouseMove + 1)
+            },
+            onMouseOut = {
+                mapListenerState = mapListenerState.copy(mouseOut = mapListenerState.mouseOut + 1)
+            },
+            onMouseOver = {
+                mapListenerState = mapListenerState.copy(mouseOver = mapListenerState.mouseOver + 1)
+            },
+            onProjectionChanged = {
+                mapListenerState = mapListenerState.copy(projectionChanged = mapListenerState.projectionChanged + 1)
+            },
+            onRenderingTypeChanged = {
+                mapListenerState = mapListenerState.copy(renderingTypeChanged = mapListenerState.renderingTypeChanged + 1)
+            },
+            onTilesLoaded = {
+                mapListenerState = mapListenerState.copy(tilesLoaded = mapListenerState.tilesLoaded + 1)
+            },
+            onTiltChanged = {
+                mapListenerState = mapListenerState.copy(tiltChanged = mapListenerState.tiltChanged + 1)
+            },
+            onZoomChanged = {
+                mapListenerState = mapListenerState.copy(zoomChanged = mapListenerState.zoomChanged + 1)
+            },
+        )
 
         Div({
             style {

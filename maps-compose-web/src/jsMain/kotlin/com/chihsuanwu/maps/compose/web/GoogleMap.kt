@@ -25,8 +25,30 @@ import org.w3c.dom.HTMLDivElement
  * @param extra The extra parameters to be appended to the Google Maps API URL. For example, you can
  * add `"libraries=geometry"` to load the geometry library.
  * @param attrs The attributes to be applied to the map container.
- * @param events The events to be applied to the map.
+ *
+ * @param onBoundsChanged Called when the viewport bounds have changed.
+ * @param onCenterChanged Called when the map center property changes.
  * @param onClick The click listener to be applied to the map.
+ * A [MapMouseEvent] will be passed to the listener unless a place icon was clicked, in which case an
+ * [IconMouseEvent] will be passed to the listener.
+ * @param onContextMenu Called when the DOM contextmenu event is fired on the map container.
+ * @param onDoubleClick Called when the DOM dblclick event is fired on the map container.
+ * @param onDrag Called repeatedly while the user drags the map.
+ * @param onDragEnd Called when the user stops dragging the map.
+ * @param onDragStart Called when the user starts dragging the map.
+ * @param onHeadingChanged Called when the map heading property changes.
+ * @param onIdle Called when the map becomes idle after panning or zooming.
+ * @param onIsFractionalZoomEnabledChanged Called when the map isFractionalZoomEnabled property changes.
+ * @param onMapTypeIdChanged Called when the map mapTypeId property changes.
+ * @param onMouseMove Called when the user's mouse moves over the map container.
+ * @param onMouseOut Called when the user's mouse exits the map container.
+ * @param onMouseOver Called when the user's mouse enters the map container.
+ * @param onProjectionChanged Called when the projection has changed.
+ * @param onRenderingTypeChanged Called when the renderingType property changes.
+ * @param onTilesLoaded Called when the visible tiles have finished loading.
+ * @param onTiltChanged Called when the map tilt property changes.
+ * @param onZoomChanged Called when the map zoom property changes.
+ *
  * @param content the content of the map
  */
 @Composable
@@ -37,8 +59,26 @@ fun GoogleMap(
     id: String = "map",
     extra: String? = null,
     attrs: AttrBuilderContext<HTMLDivElement>? = null,
-    events: MapEventsBuilder.() -> Unit = {},
-    onClick: (MouseEvent) -> Unit = {},
+    onBoundsChanged: () -> Unit = {},
+    onCenterChanged: () -> Unit = {},
+    onClick: (MapMouseEvent) -> Unit = {},
+    onContextMenu: (MapMouseEvent) -> Unit = {},
+    onDoubleClick: (MapMouseEvent) -> Unit = {},
+    onDrag: () -> Unit = {},
+    onDragEnd: () -> Unit = {},
+    onDragStart: () -> Unit = {},
+    onHeadingChanged: () -> Unit = {},
+    onIdle: () -> Unit = {},
+    onIsFractionalZoomEnabledChanged: () -> Unit = {},
+    onMapTypeIdChanged: () -> Unit = {},
+    onMouseMove: (MapMouseEvent) -> Unit = {},
+    onMouseOut: (MapMouseEvent) -> Unit = {},
+    onMouseOver: (MapMouseEvent) -> Unit = {},
+    onProjectionChanged: () -> Unit = {},
+    onRenderingTypeChanged: () -> Unit = {},
+    onTilesLoaded: () -> Unit = {},
+    onTiltChanged: () -> Unit = {},
+    onZoomChanged: () -> Unit = {},
     content: @Composable (() -> Unit)? = null,
 ) {
     var map: MapView? by remember { mutableStateOf(null) }
@@ -72,8 +112,26 @@ fun GoogleMap(
                     MapUpdater(
                         cameraPositionState = currentCameraPositionState,
                         mapOptions = mapOptions,
-                        events = events,
+                        onBoundsChanged = onBoundsChanged,
+                        onCenterChanged = onCenterChanged,
                         onClick = onClick,
+                        onContextMenu = onContextMenu,
+                        onDoubleClick = onDoubleClick,
+                        onDrag = onDrag,
+                        onDragEnd = onDragEnd,
+                        onDragStart = onDragStart,
+                        onHeadingChanged = onHeadingChanged,
+                        onIdle = onIdle,
+                        onIsFractionalZoomEnabledChanged = onIsFractionalZoomEnabledChanged,
+                        onMapTypeIdChanged = onMapTypeIdChanged,
+                        onMouseMove = onMouseMove,
+                        onMouseOut = onMouseOut,
+                        onMouseOver = onMouseOver,
+                        onProjectionChanged = onProjectionChanged,
+                        onRenderingTypeChanged = onRenderingTypeChanged,
+                        onTilesLoaded = onTilesLoaded,
+                        onTiltChanged = onTiltChanged,
+                        onZoomChanged = onZoomChanged,
                     )
                     currentContent?.invoke()
                 }

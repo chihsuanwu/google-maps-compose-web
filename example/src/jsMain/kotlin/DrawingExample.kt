@@ -163,10 +163,8 @@ fun DrawingExample(
                 clickable = true,
                 color = "#EE4411",
                 opacity = 0.8,
-                events = {
-                    onDoubleClick = {
-                        console.log("Polyline double clicked!, ${it.latLng.asString()}")
-                    }
+                onDoubleClick = {
+                    console.log("Polyline double clicked!, ${it.latLng.asString()}")
                 }
             ) {
                 console.log("Polyline clicked!")
@@ -185,21 +183,20 @@ fun DrawingExample(
         markers.forEach { marker ->
             Marker(
                 state = marker,
+                animation = MarkerAnimation.BOUNCE,
                 title = "Hello, Marker ${marker.position.asString()}!",
-                icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+                icon = MarkerIcon.URL(url = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"),
                 draggable = true,
-                events = {
-                    onDragEnd = {
-                        console.log("Marker dragged! New position: ${it.latLng.asString()}")
-                    }
-                    onDoubleClick = {
-                        console.log("Marker double clicked!")
-                    }
-                },
                 onClick = {
                     console.log("Marker clicked at ${it.latLng.asString()}!")
                     marker.showInfoWindow()
-                }
+                },
+                onDragEnd = {
+                    console.log("Marker dragged! New position: ${it.latLng.asString()}")
+                },
+                onDoubleClick = {
+                    console.log("Marker double clicked!")
+                },
             ) {
                 Div(
                     attrs = {

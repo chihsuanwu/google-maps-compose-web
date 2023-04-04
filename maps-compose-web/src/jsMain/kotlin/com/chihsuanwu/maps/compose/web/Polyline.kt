@@ -8,8 +8,7 @@ import js.core.jso
 
 internal class PolylineNode(
     val polyline: JsPolyline,
-    var events: List<MapsEventListener>,
-    var onClick: MapsEventListener?,
+    var events: MutableMap<String, MapsEventListener>,
 ) : MapNode {
     override fun onRemoved() {
         polyline.setMap(null)
@@ -20,6 +19,7 @@ internal class PolylineNode(
  * A composable for a polyline on the map.
  *
  * @param points The points of the polyline.
+ *
  * @param clickable Indicates whether this Polyline handles mouse events.
  * @param color The stroke color. All CSS3 colors are supported except for extended named colors.
  * @param draggable If set to true, the user can drag this shape over the map.
@@ -34,8 +34,18 @@ internal class PolylineNode(
  * @param width The width of the polyline in pixels.
  * @param zIndex The zIndex compared to other polys.
  *
- * @param events The events to be applied to the polyline.
  * @param onClick A callback to be invoked when the polyline is clicked.
+ * @param onContextMenu A callback to be invoked when the DOM contextmenu event is fired on the polyline.
+ * @param onDoubleClick A callback to be invoked when the polyline is double-clicked.
+ * @param onDrag A callback to be invoked repeatedly while the user drags the polyline.
+ * @param onDragEnd A callback to be invoked when the user stops dragging the polyline.
+ * @param onDragStart A callback to be invoked when the user starts dragging the polyline.
+ * @param onMouseDown A callback to be invoked when the DOM mousedown event is fired on the polyline.
+ * @param onMouseMove A callback to be invoked when the DOM mousemove event is fired on the polyline.
+ * @param onMouseOut A callback to be invoked when the mouseout event is fired.
+ * @param onMouseOver A callback to be invoked when the mouseover event is fired.
+ * @param onMouseUp A callback to be invoked when the DOM mouseup event is fired on the polyline.
+ *
  */
 @Composable
 fun Polyline(
@@ -45,12 +55,22 @@ fun Polyline(
     draggable: Boolean = false,
     editable: Boolean = false,
     geodesic: Boolean = false,
+    // TODO: Add support for icons.
     opacity: Double = 1.0,
     visible: Boolean = true,
     width: Int = 5,
     zIndex: Double? = null,
-    events: EventsBuilder.() -> Unit = {},
-    onClick: (MouseEvent) -> Unit = {},
+    onClick: (PolyMouseEvent) -> Unit = {},
+    onContextMenu: (PolyMouseEvent) -> Unit = {},
+    onDoubleClick: (PolyMouseEvent) -> Unit = {},
+    onDrag: (MapMouseEvent) -> Unit = {},
+    onDragEnd: (MapMouseEvent) -> Unit = {},
+    onDragStart: (MapMouseEvent) -> Unit = {},
+    onMouseDown: (PolyMouseEvent) -> Unit = {},
+    onMouseMove: (PolyMouseEvent) -> Unit = {},
+    onMouseOut: (PolyMouseEvent) -> Unit = {},
+    onMouseOver: (PolyMouseEvent) -> Unit = {},
+    onMouseUp: (PolyMouseEvent) -> Unit = {},
 ) {
     val mapApplier = currentComposer.applier as MapApplier?
     ComposeNode<PolylineNode, MapApplier>(
@@ -70,7 +90,7 @@ fun Polyline(
                     this.zIndex = zIndex
                 }
             )
-            PolylineNode(polyline, emptyList(), null)
+            PolylineNode(polyline, mutableMapOf())
         },
         update = {
             set(points) { polyline.setOptions(jso { this.path = points.toJsLatLngLiteralArray() }) }
@@ -84,18 +104,60 @@ fun Polyline(
             set(width) { polyline.setOptions(jso { this.strokeWeight = width }) }
             set(zIndex) { polyline.setOptions(jso { this.zIndex = zIndex }) }
 
-            set(events) {
-                this.events.forEach { it.remove() }
-                this.events = EventsBuilder().apply(events).build().map { e ->
-                    when (e) {
-                        is Event.Unit -> polyline.addListener(e.event) { e.callback(it) }
-                        is Event.Mouse -> polyline.addListener(e.event) { e.callback((it as MapMouseEvent).toMouseEvent()) }
-                    }
-                }
-            }
             set(onClick) {
-                this.onClick?.remove()
-                this.onClick = polyline.addListener("click") { onClick((it as MapMouseEvent).toMouseEvent()) }
+                val eventName = "click"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onClick((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onContextMenu) {
+                val eventName = "contextmenu"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onContextMenu((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onDoubleClick) {
+                val eventName = "dblclick"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onDoubleClick((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onDrag) {
+                val eventName = "drag"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onDrag((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDragEnd) {
+                val eventName = "dragend"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onDragEnd((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onDragStart) {
+                val eventName = "dragstart"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onDragStart((it as JsMapMouseEvent).toMouseEvent()) }
+            }
+            set(onMouseDown) {
+                val eventName = "mousedown"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onMouseDown((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseMove) {
+                val eventName = "mousemove"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onMouseMove((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseOut) {
+                val eventName = "mouseout"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onMouseOut((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseOver) {
+                val eventName = "mouseover"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onMouseOver((it as JsPolyMouseEvent).toPolyMouseEvent()) }
+            }
+            set(onMouseUp) {
+                val eventName = "mouseup"
+                events[eventName]?.remove()
+                events[eventName] = polyline.addListener(eventName) { onMouseUp((it as JsPolyMouseEvent).toPolyMouseEvent()) }
             }
         }
     )

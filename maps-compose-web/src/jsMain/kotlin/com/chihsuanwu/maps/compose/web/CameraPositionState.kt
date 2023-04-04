@@ -4,8 +4,14 @@ import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import com.chihsuanwu.maps.compose.web.jsobject.toCameraOptions
 
-
-
+/**
+ * A [CameraPosition] describes the position of the camera on the map.
+ *
+ * @param center the center of the camera
+ * @param zoom the zoom level of the camera
+ * @param tilt the tilt of the camera
+ * @param heading the heading of the camera
+ */
 data class CameraPosition(
     val center: LatLng,
     val zoom: Double,
@@ -23,6 +29,9 @@ inline fun rememberCameraPositionState(
     CameraPositionState().apply(init)
 }
 
+/**
+ * State object that can be hoisted to control and observe the camera position of a [GoogleMap].
+ */
 class CameraPositionState(
     position: CameraPosition = CameraPosition(
         center = LatLng(0.0, 0.0),
