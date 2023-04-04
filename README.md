@@ -4,9 +4,7 @@
 
 A library for using Google Maps in [Compose for Web](https://github.com/JetBrains/compose-jb).
 
-This library is heavily inspired by [Maps Compose for Android](https://github.com/googlemaps/android-maps-compose).
-
-**Note that this library is still in its early stages, and the API is subject to change.**
+This library is inspired by [Maps Compose for Android](https://github.com/googlemaps/android-maps-compose).
 
 # Usage
 
@@ -24,17 +22,20 @@ GoogleMap(
     cameraPositionState = cameraPositionState,
     attrs = {
         style {
-            width(500.px)
-            height(500.px)
+            width(100.percent)
+            height(100.percent)
         }
     }
 )
 ```
 
+<details>
+  <summary>Configuring the map</summary>
+
 ## Configuring the map
 
 Configuring the map can be done by passing a `MapOptions` object to the `GoogleMap` composable.
-
+    
 ```kotlin
 val mapOptions = remember {
     MapOptions(
@@ -42,6 +43,7 @@ val mapOptions = remember {
         // ...
     )
 }
+
 GoogleMap(
     // ...
     mapOptions = mapOptions,
@@ -49,6 +51,13 @@ GoogleMap(
     // ...
 }
 ```
+
+</details>
+
+<details>
+  <summary>Handling map events</summary>
+
+## Handling map events
 
 Map events can be handled by passing a lambda expression to the `GoogleMap` composable.
 
@@ -61,16 +70,16 @@ GoogleMap(
     onDrag = {
         console.log("Map dragged!")
     },
-    onIdle = {
-        console.log("Map idle!")
-    },
     // Add more events here
 ) {
     // ...
 }
 ```
 
+</details>
 
+<details>
+  <summary>Drawing on the map</summary>
 
 ## Drawing on the map
 
@@ -82,31 +91,29 @@ GoogleMap(
 ) {
     Marker(
         state = MarkerState(position = LatLng(23.2, 120.5)),
+        onClick = {
+            console.log("Marker clicked!")
+        },
         // ...
     )
 }
 ```
 
-### Handling component events
+Currently, the following drawing composable are supported:
+- `Marker`
+- `Polyline`
+- `Polygon`
+- `Circle`
+- `InfoWindow`
 
-Components can be configured to handle events by passing a lambda expression to the component's parameters.
+</details>
 
-```kotlin
-Marker(
-    // ...
-    onClick = {
-        console.log("Marker clicked!")
-    },
-    onDragEnd = {
-        console.log("Marker dragged!")
-    },
-    // Add more events here
-)
-```
+<details>
+  <summary>Marker's Info Window</summary>
 
-### Marker's Info Window
+## Marker's Info Window
 
-An info window can be added to a marker by passing a composable to the `infoContent` parameter.
+An info window can be added to a `Marker` directly by passing a lambda expression to the `infoContent` parameter.
 
 To show the info window, call `showInfoWindow()` on the `MarkerState`.
 
@@ -130,6 +137,29 @@ Marker(
 state.showInfoWindow()
 ```
 
+</details>
+
+<details>
+  <summary>Map Layers</summary>
+
+## Map Layers
+
+Map layers can be added to the `GoogleMap` composable.
+
+```kotlin
+GoogleMap(
+    // ...
+) {
+    if (showTrafficLayer) {
+        TrafficLayer()
+    }
+}
+```
+
+Currently, `TrafficLayer`, `TransitLayer`, and `BicyclingLayer` are supported.
+
+</details>
+
 # Setup
 
 Add the following to your `build.gradle.kts` file:
@@ -150,7 +180,14 @@ kotlin {
 }
 ```
 
-# Contributing
+# Current State
 
-Contributions are highly appreciated! Please create a feature/bugfix branch on 
-your own fork and submit a pull request.
+**This library is currently in alpha state and the API is subject to change.** 
+
+There are still many advanced features that are not yet supported.
+However, if you are a user of Compose for Web and would like to use Google Maps in your web application, 
+this library is still worth a try.
+
+Feedback and contributions are highly appreciated! Feel free to open an issue or submit a pull request.
+
+If you like this library, please consider starring this project, so we know that it is useful to you.
