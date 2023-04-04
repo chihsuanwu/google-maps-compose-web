@@ -34,7 +34,7 @@ sealed interface MarkerIcon {
      * object.
      */
     class Symbol(
-        val path: String,
+        val path: Path,
         val anchor: Point? = null,
         val fillColor: String? = null,
         val fillOpacity: Double? = null,
@@ -44,7 +44,21 @@ sealed interface MarkerIcon {
         val strokeColor: String? = null,
         val strokeOpacity: Double? = null,
         val strokeWeight: Double? = null,
-    ) : MarkerIcon
+    ) : MarkerIcon {
+        sealed interface Path {
+            class StringPath(val path: String) : Path
+            /**
+             * [google.maps.SymbolPath](https://developers.google.com/maps/documentation/javascript/reference/marker#SymbolPath)
+             */
+            enum class SymbolPath : Path {
+                BackwardClosedArrow,
+                BackwardOpenArrow,
+                Circle,
+                ForwardClosedArrow,
+                ForwardOpenArrow,
+            }
+        }
+    }
 }
 
 /**

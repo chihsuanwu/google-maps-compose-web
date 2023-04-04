@@ -6,6 +6,24 @@ import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.jsobject.*
 import js.core.jso
 
+/**
+ * [google.maps.IconSequence](https://developers.google.com/maps/documentation/javascript/reference/polygon#IconSequence)
+ *
+ * @param fixedRotation If true, each icon in the sequence will be rotated to match the angle of the edge.
+ * @param icon The icon to render.
+ * @param offset The distance from the start of the line at which an icon is to be rendered.
+ * This distance may be expressed as a percentage of line's length (e.g. '50%') or in pixels (e.g. '50px').
+ * @param repeat The distance between consecutive icons on the line.
+ * This distance may be expressed as a percentage of the line's length (e.g. '50%') or in pixels (e.g. '50px').
+ * To disable repeating of the icon, specify '0'.
+ */
+data class IconSequence(
+    val fixedRotation: Boolean? = null,
+    val icon: MarkerIcon.Symbol? = null,
+    val offset: String? = "100%",
+    val repeat: String? = "0"
+)
+
 internal class PolylineNode(
     val polyline: JsPolyline,
     var events: MutableMap<String, MapsEventListener>,
@@ -29,6 +47,7 @@ internal class PolylineNode(
  * @param geodesic When true, edges of the polygon are interpreted as geodesic and
  * will follow the curvature of the Earth. When false, edges of the polygon are
  * rendered as straight lines in screen space.
+ * @param icons The icons to be rendered along the polyline.
  * @param opacity The opacity of the polyline between 0.0 and 1.0.
  * @param visible Whether this polyline is visible on the map.
  * @param width The width of the polyline in pixels.
@@ -55,7 +74,7 @@ fun Polyline(
     draggable: Boolean = false,
     editable: Boolean = false,
     geodesic: Boolean = false,
-    // TODO: Add support for icons.
+    icons: List<IconSequence>? = null,
     opacity: Double = 1.0,
     visible: Boolean = true,
     width: Int = 5,
@@ -83,6 +102,7 @@ fun Polyline(
                     this.draggable = draggable
                     this.editable = editable
                     this.geodesic = geodesic
+                    this.icons = icons?.toJsIconSequenceArray()
                     this.map = mapApplier?.map
                     this.strokeOpacity = opacity
                     this.visible = visible
@@ -99,6 +119,7 @@ fun Polyline(
             set(draggable) { polyline.setOptions(jso { this.draggable = draggable }) }
             set(editable) { polyline.setOptions(jso { this.editable = editable }) }
             set(geodesic) { polyline.setOptions(jso { this.geodesic = geodesic }) }
+            set(icons) { polyline.setOptions(jso { this.icons = icons?.toJsIconSequenceArray() }) }
             set(opacity) { polyline.setOptions(jso { this.strokeOpacity = opacity }) }
             set(visible) { polyline.setOptions(jso { this.visible = visible }) }
             set(width) { polyline.setOptions(jso { this.strokeWeight = width }) }

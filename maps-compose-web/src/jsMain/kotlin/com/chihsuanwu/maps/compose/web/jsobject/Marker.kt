@@ -67,7 +67,7 @@ internal external interface JsIcon : JsMarkerIcon {
 }
 
 internal external interface JsSymbol : JsMarkerIcon {
-    var path: String
+    var path: JsPath
     var anchor: JsPoint?
     var fillColor: String?
     var fillOpacity: Double?
@@ -78,6 +78,10 @@ internal external interface JsSymbol : JsMarkerIcon {
     var strokeOpacity: Double?
     var strokeWeight: Double?
 }
+
+internal external interface JsPath
+internal external interface JsStringPath : JsPath
+internal external interface JsSymbolPath : JsPath
 
 internal fun MarkerIcon.Icon.toJsIcon(): JsIcon {
     val icon = this
@@ -94,7 +98,7 @@ internal fun MarkerIcon.Icon.toJsIcon(): JsIcon {
 internal fun MarkerIcon.Symbol.toJsSymbol(): JsSymbol {
     val symbol = this
     return jso {
-        path = symbol.path
+        path = symbol.path.toJsPath()
         anchor = symbol.anchor?.toJsPoint()
         fillColor = symbol.fillColor
         fillOpacity = symbol.fillOpacity
@@ -104,6 +108,19 @@ internal fun MarkerIcon.Symbol.toJsSymbol(): JsSymbol {
         strokeColor = symbol.strokeColor
         strokeOpacity = symbol.strokeOpacity
         strokeWeight = symbol.strokeWeight
+    }
+}
+
+internal fun MarkerIcon.Symbol.Path.toJsPath(): JsPath {
+    return when (this) {
+        is MarkerIcon.Symbol.Path.StringPath -> this.path as JsStringPath
+        is MarkerIcon.Symbol.Path.SymbolPath -> when (this) {
+            MarkerIcon.Symbol.Path.SymbolPath.BackwardClosedArrow -> js("google.maps.SymbolPath.BACKWARD_CLOSED_ARROW") as JsSymbolPath
+            MarkerIcon.Symbol.Path.SymbolPath.BackwardOpenArrow -> js("google.maps.SymbolPath.BACKWARD_OPEN_ARROW") as JsSymbolPath
+            MarkerIcon.Symbol.Path.SymbolPath.Circle -> js("google.maps.SymbolPath.CIRCLE") as JsSymbolPath
+            MarkerIcon.Symbol.Path.SymbolPath.ForwardClosedArrow -> js("google.maps.SymbolPath.FORWARD_CLOSED_ARROW") as JsSymbolPath
+            MarkerIcon.Symbol.Path.SymbolPath.ForwardOpenArrow -> js("google.maps.SymbolPath.FORWARD_OPEN_ARROW") as JsSymbolPath
+        }
     }
 }
 

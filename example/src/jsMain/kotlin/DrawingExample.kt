@@ -21,7 +21,7 @@ fun DrawingExample(
     var polygon: List<LatLng> by remember { mutableStateOf(emptyList()) }
     var markers: List<MarkerState> by remember { mutableStateOf(emptyList()) }
     val infoWindowState: InfoWindowState = remember { InfoWindowState(
-        LatLng(23.5, 120.8),
+        LatLng(23.47, 120.96),
     ) }
 
     Div(
@@ -162,6 +162,16 @@ fun DrawingExample(
                 points = polyline,
                 clickable = true,
                 color = "#EE4411",
+                icons = listOf(
+                    IconSequence(
+                        icon = MarkerIcon.Symbol(
+                            path = MarkerIcon.Symbol.Path.SymbolPath.Circle,
+                            scale = 5.0,
+                            strokeColor = "#33FF22",
+                        ),
+                        repeat = "100%"
+                    ),
+                ),
                 opacity = 0.8,
                 onDoubleClick = {
                     console.log("Polyline double clicked!, ${it.latLng.asString()}")
@@ -185,7 +195,11 @@ fun DrawingExample(
                 state = marker,
                 animation = MarkerAnimation.BOUNCE,
                 title = "Hello, Marker ${marker.position.asString()}!",
-                icon = MarkerIcon.URL(url = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"),
+//                icon = MarkerIcon.URL(url = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"),
+                icon = MarkerIcon.Symbol(
+                    path = MarkerIcon.Symbol.Path.SymbolPath.BackwardClosedArrow,
+                    scale = 5.0,
+                ),
                 draggable = true,
                 onClick = {
                     console.log("Marker clicked at ${it.latLng.asString()}!")
@@ -232,14 +246,19 @@ fun DrawingExample(
         }
 
         InfoWindow(
-            state = infoWindowState
+            state = infoWindowState,
+            maxWidth = 200,
         ) {
             Div(
                 attrs = {
                     style {
-                        backgroundColor(Color("#0066BB"))
+                        backgroundColor(Color("#11CC44"))
                         padding(5.px)
                         borderRadius(5.px)
+                        display(DisplayStyle.Flex)
+                        flexDirection(FlexDirection.Column)
+                        justifyContent(JustifyContent.Center)
+                        alignItems(AlignItems.Center)
                     }
                 }
             ) {
@@ -249,20 +268,10 @@ fun DrawingExample(
                         fontWeight("bold")
                     }
                 }) {
-                    Text("Hello, InfoWindow ${infoWindowState.position.asString()}!")
+                    Text("Taiwan's highest mountain")
                 }
 
-                Button({
-                    style {
-                        color(Color("#FFCC00"))
-                        marginLeft(10.px)
-                    }
-                    onClick {
-                        infoWindowState.hideInfoWindow()
-                    }
-                }) {
-                    Text("Close")
-                }
+                Text("Mount Yu-Shan (also known as Jade Mountain) is the highest mountain in Taiwan, at 3,952 m (12,966 ft) above sea level.")
             }
         }
     }

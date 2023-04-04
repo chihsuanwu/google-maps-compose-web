@@ -35,8 +35,6 @@ GoogleMap(
 
 Configuring the map can be done by passing a `MapOptions` object to the `GoogleMap` composable.
 
-**NOTE** currently, some sub-options only expose by dynamic attributes, e.g., `MapOptions.fullscreenControlOptions`.
-
 ```kotlin
 val mapOptions = remember {
     MapOptions(
@@ -52,24 +50,21 @@ GoogleMap(
 }
 ```
 
-Map events can be handled by `events` parameter, which accepts an event builder.
-Additionally, `onClick` event can be handled by the `onClick` parameter.
+Map events can be handled by passing a lambda expression to the `GoogleMap` composable.
 
 ```kotlin
 GoogleMap(
     // ...
-    events = {
-        onDrag = {
-            console.log("Map dragged!")
-        }
-        onIdle = {
-            console.log("Map idle!")
-        }
-        // other events ...
-    },
     onClick = {
         console.log("Map clicked!")
-    }
+    },
+    onDrag = {
+        console.log("Map dragged!")
+    },
+    onIdle = {
+        console.log("Map idle!")
+    },
+    // Add more events here
 ) {
     // ...
 }
@@ -94,24 +89,18 @@ GoogleMap(
 
 ### Handling component events
 
-Components expose `onClick` events as a lambda expression. Other events can be handled 
-by `events` parameter, which accepts an event builder.
+Components can be configured to handle events by passing a lambda expression to the component's parameters.
 
 ```kotlin
 Marker(
     // ...
-    events = {
-        onDragEnd = {
-            console.log("Marker dragged!")
-        }
-        onDoubleClick = {
-            console.log("Marker double clicked!")
-        }
-        // other events ...
-    },
     onClick = {
         console.log("Marker clicked!")
-    }
+    },
+    onDragEnd = {
+        console.log("Marker dragged!")
+    },
+    // Add more events here
 )
 ```
 
