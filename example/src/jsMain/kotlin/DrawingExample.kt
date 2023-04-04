@@ -1,5 +1,6 @@
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.*
+import com.chihsuanwu.maps.compose.web.drawing.*
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div

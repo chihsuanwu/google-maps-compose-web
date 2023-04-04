@@ -51,7 +51,7 @@ data class MapOptions(
  * for more details
  */
 class MapTypeStyles(
-    internal val styles: Array<MapTypeStyle>,
+    internal val styles: List<MapTypeStyle>,
 ) {
     companion object {
         /**
@@ -63,9 +63,9 @@ class MapTypeStyles(
                 MapTypeStyle(
                     elementType = it.elementType as? String,
                     featureType = it.featureType as? String,
-                    stylers = it.stylers as? Array<*>,
+                    stylers = (it.stylers as? Array<*>)?.asList(),
                 )
-            }.let { MapTypeStyles(it.toTypedArray()) }
+            }.let { MapTypeStyles(it) }
         }
     }
 }
@@ -73,7 +73,7 @@ class MapTypeStyles(
 class MapTypeStyle(
     val elementType: String? = null,
     val featureType: String? = null,
-    val stylers: Array<dynamic>? = null,
+    val stylers: List<dynamic>? = null,
 )
 
 enum class MapTypeId {
@@ -101,7 +101,7 @@ class FullscreenControlOptions(
  * for more details
  */
 class MapTypeControlOptions(
-    val mapTypeIds: Array<MapTypeId>? = null,
+    val mapTypeIds: List<MapTypeId>? = null,
     val position: ControlPosition? = null,
     val style: MapTypeControlStyle? = null,
 )

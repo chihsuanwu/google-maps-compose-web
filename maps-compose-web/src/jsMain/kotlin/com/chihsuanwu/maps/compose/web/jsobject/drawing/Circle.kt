@@ -1,4 +1,8 @@
-package com.chihsuanwu.maps.compose.web.jsobject
+package com.chihsuanwu.maps.compose.web.jsobject.drawing
+
+import com.chihsuanwu.maps.compose.web.jsobject.AddListener
+import com.chihsuanwu.maps.compose.web.jsobject.JsLatLngLiteral
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
 
 /**
  * A [google.maps.Circle](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon.constructor) object

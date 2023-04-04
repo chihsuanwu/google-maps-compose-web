@@ -1,7 +1,13 @@
-package com.chihsuanwu.maps.compose.web
+package com.chihsuanwu.maps.compose.web.drawing
 
 import androidx.compose.runtime.*
+import com.chihsuanwu.maps.compose.web.LatLng
+import com.chihsuanwu.maps.compose.web.MapApplier
+import com.chihsuanwu.maps.compose.web.MapNode
+import com.chihsuanwu.maps.compose.web.Size
 import com.chihsuanwu.maps.compose.web.jsobject.*
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.JsInfoWindow
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.newInfoWindow
 import com.chihsuanwu.maps.compose.web.jsobject.toJsLatLngLiteral
 import js.core.jso
 import kotlinx.browser.document

@@ -1,9 +1,15 @@
-package com.chihsuanwu.maps.compose.web
+package com.chihsuanwu.maps.compose.web.drawing
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
+import com.chihsuanwu.maps.compose.web.*
+import com.chihsuanwu.maps.compose.web.MapApplier
+import com.chihsuanwu.maps.compose.web.MapNode
 import com.chihsuanwu.maps.compose.web.jsobject.*
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.JsPolygon
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.newPolygon
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.toJs
 import js.core.jso
 
 enum class StrokePosition {

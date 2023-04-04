@@ -1,5 +1,10 @@
-package com.chihsuanwu.maps.compose.web.jsobject
+package com.chihsuanwu.maps.compose.web.jsobject.drawing
 
+import com.chihsuanwu.maps.compose.web.jsobject.AddListener
+import com.chihsuanwu.maps.compose.web.jsobject.JsLatLng
+import com.chihsuanwu.maps.compose.web.jsobject.JsLatLngLiteral
+import com.chihsuanwu.maps.compose.web.jsobject.JsSize
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import org.w3c.dom.Element
 
 internal external interface JsInfoWindow : AddListener {

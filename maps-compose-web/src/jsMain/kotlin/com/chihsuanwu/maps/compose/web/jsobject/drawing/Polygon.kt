@@ -1,6 +1,9 @@
-package com.chihsuanwu.maps.compose.web.jsobject
+package com.chihsuanwu.maps.compose.web.jsobject.drawing
 
-import com.chihsuanwu.maps.compose.web.StrokePosition
+import com.chihsuanwu.maps.compose.web.drawing.StrokePosition
+import com.chihsuanwu.maps.compose.web.jsobject.AddListener
+import com.chihsuanwu.maps.compose.web.jsobject.JsLatLngLiteral
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
 
 /**
  * A [google.maps.Polygon](https://developers.google.com/maps/documentation/javascript/reference/polygon#Polygon.constructor) object

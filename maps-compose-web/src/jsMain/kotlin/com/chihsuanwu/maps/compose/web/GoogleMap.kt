@@ -100,6 +100,7 @@ fun GoogleMap(
     }
 
     val currentCameraPositionState by rememberUpdatedState(cameraPositionState)
+    val currentMapOptions by rememberUpdatedState(mapOptions)
 
     val parentComposition = rememberCompositionContext()
     val currentContent by rememberUpdatedState(content)
@@ -111,7 +112,7 @@ fun GoogleMap(
                 currentMap.newComposition(parentComposition) {
                     MapUpdater(
                         cameraPositionState = currentCameraPositionState,
-                        mapOptions = mapOptions,
+                        mapOptions = currentMapOptions,
                         onBoundsChanged = onBoundsChanged,
                         onCenterChanged = onCenterChanged,
                         onClick = onClick,

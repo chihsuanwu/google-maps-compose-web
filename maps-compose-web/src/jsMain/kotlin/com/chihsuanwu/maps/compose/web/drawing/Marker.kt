@@ -1,7 +1,15 @@
-package com.chihsuanwu.maps.compose.web
+package com.chihsuanwu.maps.compose.web.drawing
 
 import androidx.compose.runtime.*
+import com.chihsuanwu.maps.compose.web.*
+import com.chihsuanwu.maps.compose.web.MapApplier
+import com.chihsuanwu.maps.compose.web.MapNode
 import com.chihsuanwu.maps.compose.web.jsobject.*
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.*
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.JsMarker
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.newMarker
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.toJsAnimation
+import com.chihsuanwu.maps.compose.web.jsobject.drawing.toJsMarkerIcon
 import js.core.jso
 import kotlinx.browser.document
 import org.jetbrains.compose.web.renderComposable

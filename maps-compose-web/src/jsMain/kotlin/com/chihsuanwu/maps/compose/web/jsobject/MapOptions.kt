@@ -19,31 +19,31 @@ internal external interface JsMapOptions {
     var draggableCursor: String
     var draggingCursor: String
     var fullscreenControl: Boolean
-    var fullscreenControlOptions: JsFullscreenControlOptions
+    var fullscreenControlOptions: JsFullscreenControlOptions?
     var gestureHandling: String
     var isFractionalZoomEnabled: Boolean
     var keyboardShortcuts: Boolean
     var mapId: String
     var mapTypeControl: Boolean
-    var mapTypeControlOptions: JsMapTypeControlOptions
+    var mapTypeControlOptions: JsMapTypeControlOptions?
     var mapTypeId: String
     var maxZoom: Double
     var minZoom: Double
     var noClear: Boolean
     var panControl: Boolean
-    var panControlOptions: JsPanControlOptions
-    var restriction: JsMapRestriction
+    var panControlOptions: JsPanControlOptions?
+    var restriction: JsMapRestriction?
     var rotateControl: Boolean
-    var rotateControlOptions: JsRotateControlOptions
+    var rotateControlOptions: JsRotateControlOptions?
     var scaleControl: Boolean
     var scaleControlOptions: dynamic
     var scrollwheel: Boolean
     var streetView: dynamic
     var streetViewControl: Boolean
-    var streetViewControlOptions: JsStreetViewControlOptions
-    var styles: Array<JsMapTypeStyle>
+    var streetViewControlOptions: JsStreetViewControlOptions?
+    var styles: Array<JsMapTypeStyle>?
     var zoomControl: Boolean
-    var zoomControlOptions: JsZoomControlOptions
+    var zoomControlOptions: JsZoomControlOptions?
 }
 
 internal fun MapOptions.toJsMapOptions(): JsMapOptions {
@@ -57,31 +57,31 @@ internal fun MapOptions.toJsMapOptions(): JsMapOptions {
         opt.draggableCursor?.let { draggableCursor = it }
         opt.draggingCursor?.let { draggingCursor = it }
         opt.fullscreenControl?.let { fullscreenControl = it }
-        opt.fullscreenControlOptions?.let { fullscreenControlOptions = it.toJsFullscreenControlOptions() }
+        fullscreenControlOptions = opt.fullscreenControlOptions?.toJsFullscreenControlOptions()
         opt.gestureHandling?.let { gestureHandling = it }
         opt.isFractionalZoomEnabled?.let { isFractionalZoomEnabled = it }
         opt.keyboardShortcuts?.let { keyboardShortcuts = it }
         opt.mapId?.let { mapId = it }
         opt.mapTypeControl?.let { mapTypeControl = it }
-        opt.mapTypeControlOptions?.let { mapTypeControlOptions = it.toJsMapTypeControlOptions() }
+        mapTypeControlOptions = opt.mapTypeControlOptions?.toJsMapTypeControlOptions()
         opt.mapTypeId?.let { mapTypeId = it.toJsTypeIdString() }
         opt.maxZoom?.let { maxZoom = it }
         opt.minZoom?.let { minZoom = it }
         opt.noClear?.let { noClear = it }
         opt.panControl?.let { panControl = it }
-        opt.panControlOptions?.let { panControlOptions = it.toJsPanControlOptions() }
-        opt.restriction?.let { restriction = it.toJsMapRestriction() }
+        panControlOptions = opt.panControlOptions?.toJsPanControlOptions()
+        restriction = opt.restriction?.toJsMapRestriction()
         opt.rotateControl?.let { rotateControl = it }
-        opt.rotateControlOptions?.let { rotateControlOptions = it.toJsRotateControlOptions() }
+        rotateControlOptions = opt.rotateControlOptions?.toJsRotateControlOptions()
         opt.scaleControl?.let { scaleControl = it }
         scaleControlOptions = opt.scaleControlOptions
         opt.scrollwheel?.let { scrollwheel = it }
         streetView = opt.streetView
         opt.streetViewControl?.let { streetViewControl = it }
-        opt.streetViewControlOptions?.let { streetViewControlOptions = it.toJsStreetViewControlOptions() }
-        opt.styles?.let { styles = it.styles.map { it.toJsMapTypeStyle() }.toTypedArray() }
+        streetViewControlOptions = opt.streetViewControlOptions?.toJsStreetViewControlOptions()
+        styles = opt.styles?.styles?.map { it.toJsMapTypeStyle() }?.toTypedArray()
         opt.zoomControl?.let { zoomControl = it }
-        opt.zoomControlOptions?.let { zoomControlOptions = it.toJsZoomControlOptions() }
+        zoomControlOptions = opt.zoomControlOptions?.toJsZoomControlOptions()
     }
 }
 
@@ -99,7 +99,7 @@ internal fun MapTypeStyle.toJsMapTypeStyle(): JsMapTypeStyle {
     return jso {
         style.elementType?.let { elementType = it }
         style.featureType?.let { featureType = it }
-        style.stylers?.let { stylers = it }
+        style.stylers?.let { stylers = it.toTypedArray() }
     }
 }
 

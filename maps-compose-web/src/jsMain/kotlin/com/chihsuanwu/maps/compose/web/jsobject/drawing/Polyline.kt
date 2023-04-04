@@ -1,6 +1,9 @@
-package com.chihsuanwu.maps.compose.web.jsobject
+package com.chihsuanwu.maps.compose.web.jsobject.drawing
 
-import com.chihsuanwu.maps.compose.web.IconSequence
+import com.chihsuanwu.maps.compose.web.drawing.IconSequence
+import com.chihsuanwu.maps.compose.web.jsobject.AddListener
+import com.chihsuanwu.maps.compose.web.jsobject.JsLatLngLiteral
+import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import js.core.jso
 
 /**
