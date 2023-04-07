@@ -50,12 +50,12 @@ internal external interface JsLatLngBoundsLiteral {
     var west: Double
 }
 
-internal fun LatLngBounds.toJsLatLngBounds(): JsLatLngBoundsLiteral {
+internal fun LatLngBounds.toJsLatLngBoundsLiteral(): JsLatLngBoundsLiteral {
     return jso {
-        east = this@toJsLatLngBounds.east
-        north = this@toJsLatLngBounds.north
-        south = this@toJsLatLngBounds.south
-        west = this@toJsLatLngBounds.west
+        east = this@toJsLatLngBoundsLiteral.east
+        north = this@toJsLatLngBoundsLiteral.north
+        south = this@toJsLatLngBoundsLiteral.south
+        west = this@toJsLatLngBoundsLiteral.west
     }
 }
 

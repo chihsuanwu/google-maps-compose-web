@@ -246,7 +246,7 @@ internal external interface JsMapRestriction {
 internal fun MapRestriction.toJsMapRestriction(): JsMapRestriction {
     val restriction = this
     return jso {
-        restriction.latLngBounds.let { latLngBounds = it.toJsLatLngBounds() }
+        restriction.latLngBounds.let { latLngBounds = it.toJsLatLngBoundsLiteral() }
         restriction.strictBounds?.let { strictBounds = it }
     }
 }

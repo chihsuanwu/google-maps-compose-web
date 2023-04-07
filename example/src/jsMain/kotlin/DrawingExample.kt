@@ -174,12 +174,13 @@ fun DrawingExample(
                     ),
                 ),
                 opacity = 0.8,
+                onClick = {
+                    console.log("Polyline clicked!")
+                },
                 onDoubleClick = {
                     console.log("Polyline double clicked!, ${it.latLng.asString()}")
-                }
-            ) {
-                console.log("Polyline clicked!")
-            }
+                },
+            )
         }
 
         if (polygon.isNotEmpty()) {

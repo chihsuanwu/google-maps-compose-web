@@ -96,10 +96,10 @@ fun Polygon(
                 jso {
                     this.paths = points.toJsLatLngLiteralArray()
                     this.clickable = clickable
-                    this.fillColor = fillColor
-                    this.fillOpacity = fillOpacity
                     this.draggable = draggable
                     this.editable = editable
+                    this.fillColor = fillColor
+                    this.fillOpacity = fillOpacity
                     this.geodesic = geodesic
                     this.map = mapApplier?.map
                     this.strokeColor = strokeColor
