@@ -21,10 +21,10 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-js"))
 
-                implementation(compose.web.core)
+                implementation(compose.html.core)
                 implementation(compose.runtime)
 
-                implementation("app.softwork:routing-compose:0.2.11")
+                implementation("app.softwork:routing-compose:0.2.12")
 
                 implementation(project(":maps-compose-web"))
             }

@@ -9,7 +9,7 @@ group = "com.github.chihsuanwu"
 
 fun kotlinw(target: String): String = "org.jetbrains.kotlin-wrappers:kotlin-$target"
 
-val kotlinWrappersVersion = "1.0.0-pre.516"
+val kotlinWrappersVersion = "1.0.0-pre.537"
 
 kotlin {
     jvmToolchain(11)
@@ -32,7 +32,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(kotlinw("js"))
 
-                implementation(compose.web.core)
+                implementation(compose.html.core)
                 implementation(compose.runtime)
             }
         }
