@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/chihsuanwu/google-maps-compose-web.svg)](https://jitpack.io/#chihsuanwu/google-maps-compose-web)
 
-A library for using Google Maps in [Compose for Web](https://github.com/JetBrains/compose-jb).
+A library for using Google Maps in [Compose HTML](https://github.com/JetBrains/compose-jb).
 
 This library is inspired by [Maps Compose for Android](https://github.com/googlemaps/android-maps-compose).
 
@@ -185,7 +185,7 @@ kotlin {
 **This library is currently in alpha state and the API is subject to change.** 
 
 There are still many advanced features that are not yet supported.
-However, if you are a user of Compose for Web and would like to use Google Maps in your web application, 
+However, if you are a user of Compose HTML and would like to use Google Maps in your web application, 
 this library is still worth a try.
 
 Feedback and contributions are highly appreciated! Feel free to open an issue or submit a pull request.
