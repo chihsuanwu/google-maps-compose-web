@@ -276,5 +276,33 @@ fun DrawingExample(
                 Text("Mount Yu-Shan (also known as Jade Mountain) is the highest mountain in Taiwan, at 3,952 m (12,966 ft) above sea level.")
             }
         }
+
+        OverlayView(
+            bounds = LatLngBounds(
+                east = 122.0,
+                north = 25.0,
+                south = 22.0,
+                west = 120.0,
+            ),
+            mapPane = MapPanes.FloatPane,
+        ) {
+            Div(
+                attrs = {
+                    style {
+                        backgroundColor(Color("#FF0000"))
+                        padding(5.px)
+                        borderRadius(5.px)
+                        display(DisplayStyle.Flex)
+                        flexDirection(FlexDirection.Column)
+                        justifyContent(JustifyContent.Center)
+                        alignItems(AlignItems.Center)
+                        width(100.percent)
+                        height(100.percent)
+                    }
+                }
+            ) {
+                Text("Hello, OverlayView!")
+            }
+        }
     }
 }
