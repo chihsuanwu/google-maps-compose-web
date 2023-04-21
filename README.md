@@ -99,12 +99,30 @@ GoogleMap(
 }
 ```
 
+To display custom content on the map, use the `OverlayView` composable.
+
+```kotlin
+GoogleMap(
+    // ...
+) {
+    OverlayView(
+        bounds = LatLngBounds(
+            // ...
+        ),
+        content = {
+            Div {
+                Text("Overlay View")
+            }
+        }
+    )
+}
+```
+
 Currently, the following drawing composable are supported:
 - `Marker`
-- `Polyline`
-- `Polygon`
-- `Circle`
+- `Polygons` (polygon, polyline, rectangle, circle)
 - `InfoWindow`
+- `OverlayView`
 
 </details>
 
