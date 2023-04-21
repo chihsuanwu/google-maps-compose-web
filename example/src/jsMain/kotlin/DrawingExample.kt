@@ -6,149 +6,39 @@ import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
+import kotlin.random.Random
+
+
+private class State {
+    var cameraPositionState: CameraPositionState = CameraPositionState(
+        CameraPosition(
+            center = LatLng(23.5, 120.8),
+            zoom = 7.6,
+        )
+    )
+    var polyline: List<LatLng> by mutableStateOf(emptyList())
+    var polygon: List<LatLng> by mutableStateOf(emptyList())
+    var markers: List<MarkerState> by mutableStateOf(emptyList())
+    var infoWindowState: InfoWindowState by mutableStateOf(
+        InfoWindowState(
+            LatLng(23.47, 120.96),
+        )
+    )
+    var overlayViewBounds: LatLngBounds? by mutableStateOf(null)
+    var overlayViewLayer: MapPanes by mutableStateOf(MapPanes.OverlayLayer)
+}
 
 @Composable
 fun DrawingExample(
     apiKey: String,
 ) {
-    val cameraPositionState = rememberCameraPositionState  {
-        position = CameraPosition(
-            center = LatLng(23.5, 120.8),
-            zoom = 7.6,
-        )
-    }
+    val state = remember { State() }
 
-    var polyline: List<LatLng> by remember { mutableStateOf(emptyList()) }
-    var polygon: List<LatLng> by remember { mutableStateOf(emptyList()) }
-    var markers: List<MarkerState> by remember { mutableStateOf(emptyList()) }
-    val infoWindowState: InfoWindowState = remember { InfoWindowState(
-        LatLng(23.47, 120.96),
-    ) }
-
-    Div(
-        attrs = {
-            style {
-                margin(5.px)
-            }
-        }
-    ) {
-        if (polyline.isNotEmpty()) {
-            Span(
-                attrs = {
-                    style {
-                        color(Color("#EE4411"))
-                        fontWeight("bold")
-                    }
-                }
-            ) {
-                Text("Taiwan High Speed Rail")
-            }
-        }
-        Button(
-            attrs = {
-                style {
-                    marginLeft(10.px)
-                    marginRight(10.px)
-                }
-                onClick {
-                    if (polyline.isNotEmpty()) {
-                        polyline = emptyList()
-                        return@onClick
-                    }
-                    val path = "{d|wCkjfeVv^|rP`uEvgInChuo@l_g@zaa@fpf@l}h@pk_Bb{g@|mm@dcGh}Yzz]jbu@nhQllgBjdFzfm@_fC"
-                    polyline = path.decodePath()
-                }
-            }
-        ) {
-            Text(if (polyline.isEmpty()) "Draw Polyline" else "Clear Polyline")
-        }
-
-        if (polygon.isNotEmpty()) {
-            Span(
-                attrs = {
-                    style {
-                        color(Color("#EE4411"))
-                        fontWeight("bold")
-                        marginLeft(10.px)
-                    }
-                }
-            ) {
-                Text("Taipei City")
-            }
-        }
-        Button(
-            attrs = {
-                style {
-                    marginLeft(10.px)
-                    marginRight(10.px)
-                }
-                onClick {
-                    if (polygon.isNotEmpty()) {
-                        polygon = emptyList()
-                        return@onClick
-                    }
-                    val path = """
-                        odwwCwmqeVhWtG{BhbEns@|nDp|ChRf`BcAze@o{Btm@jhCa`@vnCtHp_BoyBre@gZ~eBi{@
-                        zi@_dAfBgfA~eBxkAzrBgj@~c@}lC`^yh@wbBevCwh@qcD~_Bap@vaEeqBfCgtDs{CykCyqB
-                        hWycB{wCs|CaaBqnBl~AgfBvlCsGd{@wdAdcEk}AjxBtt@h{A_oDbiE`l@|kCaO|eAslC~Oc~B
-                    """.trimIndent().replace("\n", "")
-                    polygon = path.decodePath()
-                }
-            }
-        ) {
-            Text(if (polygon.isEmpty()) "Draw Polygon" else "Clear Polygon")
-        }
-
-        Button(
-            attrs = {
-                style {
-                    marginLeft(10.px)
-                }
-                onClick {
-                    markers = markers + listOf(
-                        MarkerState(
-                            position = LatLng(
-                                cameraPositionState.position.center.lat,
-                                cameraPositionState.position.center.lng,
-                            )
-                        )
-                    )
-                }
-            }
-        ) {
-            Text("Add Marker At Camera Center")
-        }
-
-        Button(
-            attrs = {
-                style {
-                    marginLeft(10.px)
-                }
-                onClick {
-                    markers = emptyList()
-                }
-            }
-        ) {
-            Text("Clear Markers")
-        }
-
-        Button(
-            attrs = {
-                style {
-                    marginLeft(10.px)
-                }
-                onClick {
-                    infoWindowState.showInfoWindow()
-                }
-            }
-        ) {
-            Text("Show InfoWindow")
-        }
-    }
+    ToolBar(state)
 
     GoogleMap(
         apiKey = apiKey,
-        cameraPositionState = cameraPositionState,
+        cameraPositionState = state.cameraPositionState,
         extra = "libraries=geometry", // Required for decoding path from encoded string
         attrs = {
             style {
@@ -158,9 +48,9 @@ fun DrawingExample(
             }
         }
     ) {
-        if (polyline.isNotEmpty()) {
+        if (state.polyline.isNotEmpty()) {
             Polyline(
-                points = polyline,
+                points = state.polyline,
                 clickable = true,
                 color = "#EE4411",
                 icons = listOf(
@@ -183,16 +73,16 @@ fun DrawingExample(
             )
         }
 
-        if (polygon.isNotEmpty()) {
+        if (state.polygon.isNotEmpty()) {
             Polygon(
-                points = polygon,
+                points = state.polygon,
                 fillColor = "#EE4411",
                 fillOpacity = 0.38,
                 strokeColor = "#DD8822",
             )
         }
 
-        markers.forEach { marker ->
+        state.markers.forEach { marker ->
             Marker(
                 state = marker,
                 animation = MarkerAnimation.BOUNCE,
@@ -248,7 +138,7 @@ fun DrawingExample(
         }
 
         InfoWindow(
-            state = infoWindowState,
+            state = state.infoWindowState,
             maxWidth = 200,
         ) {
             Div(
@@ -277,31 +167,240 @@ fun DrawingExample(
             }
         }
 
-        OverlayView(
-            bounds = LatLngBounds(
-                east = 122.0,
-                north = 25.0,
-                south = 22.0,
-                west = 120.0,
-            ),
-            mapPane = MapPanes.FloatPane,
+        state.overlayViewBounds?.let {
+            OverlayView(
+                bounds = it,
+                mapPane = state.overlayViewLayer,
+            ) {
+                Div(
+                    attrs = {
+                        style {
+                            backgroundColor(Color("#FFCC88"))
+                            padding(15.px)
+                            borderRadius(15.px)
+                            display(DisplayStyle.Flex)
+                            flexDirection(FlexDirection.Column)
+                            justifyContent(JustifyContent.Center)
+                            alignItems(AlignItems.Center)
+                            width(100.percent)
+                            height(100.percent)
+                        }
+                    }
+                ) {
+                    var clicked by remember { mutableStateOf(false) }
+                    Text("Hello, OverlayView! In ${state.overlayViewLayer}")
+                    Button({
+                        onClick {
+                            clicked = !clicked
+                        }
+                    }) {
+                        Text("Click me!")
+                    }
+                    if (clicked) {
+                        Text("The content can be recomposed dynamically!")
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+@Composable
+private fun ToolBar(state: State) {
+    Div {
+        Div(
+            attrs = {
+                style {
+                    margin(5.px)
+                }
+            }
         ) {
-            Div(
+            if (state.polyline.isNotEmpty()) {
+                Span(
+                    attrs = {
+                        style {
+                            color(Color("#EE4411"))
+                            fontWeight("bold")
+                        }
+                    }
+                ) {
+                    Text("Taiwan High Speed Rail")
+                }
+            }
+            Button(
                 attrs = {
                     style {
-                        backgroundColor(Color("#FF0000"))
-                        padding(5.px)
-                        borderRadius(5.px)
-                        display(DisplayStyle.Flex)
-                        flexDirection(FlexDirection.Column)
-                        justifyContent(JustifyContent.Center)
-                        alignItems(AlignItems.Center)
-                        width(100.percent)
-                        height(100.percent)
+                        marginLeft(10.px)
+                        marginRight(10.px)
+                    }
+                    onClick {
+                        if (state.polyline.isNotEmpty()) {
+                            state.polyline = emptyList()
+                            return@onClick
+                        }
+                        val path =
+                            "{d|wCkjfeVv^|rP`uEvgInChuo@l_g@zaa@fpf@l}h@pk_Bb{g@|mm@dcGh}Yzz]jbu@nhQllgBjdFzfm@_fC"
+                        state.polyline = path.decodePath()
                     }
                 }
             ) {
-                Text("Hello, OverlayView!")
+                Text(if (state.polyline.isEmpty()) "Draw Polyline" else "Clear Polyline")
+            }
+
+            if (state.polygon.isNotEmpty()) {
+                Span(
+                    attrs = {
+                        style {
+                            color(Color("#EE4411"))
+                            fontWeight("bold")
+                            marginLeft(10.px)
+                        }
+                    }
+                ) {
+                    Text("Taipei City")
+                }
+            }
+            Button(
+                attrs = {
+                    style {
+                        marginLeft(10.px)
+                        marginRight(10.px)
+                    }
+                    onClick {
+                        if (state.polygon.isNotEmpty()) {
+                            state.polygon = emptyList()
+                            return@onClick
+                        }
+                        val path = """
+                        odwwCwmqeVhWtG{BhbEns@|nDp|ChRf`BcAze@o{Btm@jhCa`@vnCtHp_BoyBre@gZ~eBi{@
+                        zi@_dAfBgfA~eBxkAzrBgj@~c@}lC`^yh@wbBevCwh@qcD~_Bap@vaEeqBfCgtDs{CykCyqB
+                        hWycB{wCs|CaaBqnBl~AgfBvlCsGd{@wdAdcEk}AjxBtt@h{A_oDbiE`l@|kCaO|eAslC~Oc~B
+                    """.trimIndent().replace("\n", "")
+                        state.polygon = path.decodePath()
+                    }
+                }
+            ) {
+                Text(if (state.polygon.isEmpty()) "Draw Polygon" else "Clear Polygon")
+            }
+
+            Button(
+                attrs = {
+                    style {
+                        marginLeft(10.px)
+                    }
+                    onClick {
+                        state.markers += listOf(
+                            MarkerState(
+                                position = LatLng(
+                                    state.cameraPositionState.position.center.lat,
+                                    state.cameraPositionState.position.center.lng,
+                                )
+                            )
+                        )
+                    }
+                }
+            ) {
+                Text("Add Marker At Camera Center")
+            }
+
+            Button(
+                attrs = {
+                    style {
+                        marginLeft(10.px)
+                    }
+                    onClick {
+                        state.markers = emptyList()
+                    }
+                }
+            ) {
+                Text("Clear Markers")
+            }
+
+            Button(
+                attrs = {
+                    style {
+                        marginLeft(10.px)
+                    }
+                    onClick {
+                        state.infoWindowState.showInfoWindow()
+                    }
+                }
+            ) {
+                Text("Show InfoWindow")
+            }
+        }
+
+        Div(
+            attrs = {
+                style {
+                    margin(5.px)
+                }
+            }
+        ) {
+            if (state.overlayViewBounds != null) {
+                Button(
+                    attrs = {
+                        style {
+                            marginLeft(10.px)
+                        }
+                        onClick {
+                            state.overlayViewBounds = LatLngBounds(
+                                east = Random.nextDouble(121.0, 122.0),
+                                north = Random.nextDouble(23.0, 24.0),
+                                south = Random.nextDouble(22.0, 23.0),
+                                west = Random.nextDouble(120.0, 121.0),
+                            )
+                        }
+                    }
+                ) {
+                    Text("Move OverlayView Randomly")
+                }
+
+                Button(
+                    attrs = {
+                        style {
+                            marginLeft(10.px)
+                        }
+                        onClick {
+                            val index = state.overlayViewLayer.ordinal + 1
+                            state.overlayViewLayer = MapPanes.values()[index % MapPanes.values().size]
+                        }
+                    }
+                ) {
+                    Text("Change OverlayView Layer, Current: ${state.overlayViewLayer}")
+                }
+
+                Button(
+                    attrs = {
+                        style {
+                            marginLeft(10.px)
+                        }
+                        onClick {
+                            state.overlayViewBounds = null
+                        }
+                    }
+                ) {
+                    Text("Hide OverlayView")
+                }
+            } else {
+                Button(
+                    attrs = {
+                        style {
+                            marginLeft(10.px)
+                        }
+                        onClick {
+                            state.overlayViewBounds = LatLngBounds(
+                                east = Random.nextDouble(121.0, 122.0),
+                                north = Random.nextDouble(23.0, 24.0),
+                                south = Random.nextDouble(22.0, 23.0),
+                                west = Random.nextDouble(120.0, 121.0),
+                            )
+                        }
+                    }
+                ) {
+                    Text("Show OverlayView")
+                }
             }
         }
     }

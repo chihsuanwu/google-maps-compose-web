@@ -1,5 +1,6 @@
 package com.chihsuanwu.maps.compose.web.jsobject.drawing
 
+import com.chihsuanwu.maps.compose.web.drawing.MapPanes
 import com.chihsuanwu.maps.compose.web.jsobject.*
 import com.chihsuanwu.maps.compose.web.jsobject.JsLatLng
 import com.chihsuanwu.maps.compose.web.jsobject.JsPoint
@@ -7,26 +8,17 @@ import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import org.w3c.dom.Element
 
 internal external interface JSOverlayView {
-//    fun onAdd()
-//    fun draw()
-//    fun onRemove()
-
     fun setMap(map: MapView?)
     fun getPanes(): JSMapPanes
     fun getProjection(): JSProjection
+
+    var onAdd: () -> Unit
+    var draw: () -> Unit
+    var onRemove: () -> Unit
 }
 
-internal fun newOverlayView(
-    onAdd: () -> Unit,
-    draw: () -> Unit,
-    onRemove: () -> Unit
-): JSOverlayView {
-    val view = js("new google.maps.OverlayView();")
-    view.onAdd = onAdd
-    view.draw = draw
-    view.onRemove = onRemove
-
-    return view as JSOverlayView
+internal fun newOverlayView(): JSOverlayView {
+    return js("new google.maps.OverlayView();") as JSOverlayView
 }
 
 internal external interface JSMapPanes {
@@ -35,6 +27,16 @@ internal external interface JSMapPanes {
     var markerLayer: Element
     var overlayLayer: Element
     var overlayMouseTarget: Element
+}
+
+internal fun JSMapPanes.getPane(pane: MapPanes): Element {
+    return when (pane) {
+        MapPanes.FloatPane -> floatPane
+        MapPanes.MapPane -> mapPane
+        MapPanes.MarkerLayer -> markerLayer
+        MapPanes.OverlayLayer -> overlayLayer
+        MapPanes.OverlayMouseTarget -> overlayMouseTarget
+    }
 }
 
 internal external interface JSProjection {
