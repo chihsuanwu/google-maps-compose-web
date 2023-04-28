@@ -19,6 +19,12 @@ internal fun JsLatLng.toLatLng(): LatLng {
     return LatLng(lat(), lng())
 }
 
+internal fun LatLng.toJsLatLng(): JsLatLng {
+    val lat = this.lat
+    val lng = this.lng
+    return js("new google.maps.LatLng(lat, lng);") as JsLatLng
+}
+
 /**
  * A [google.maps.LatLngLiteral](https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngLiteral)
  * object.

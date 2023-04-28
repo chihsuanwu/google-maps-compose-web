@@ -50,6 +50,9 @@ private fun MainPage() {
                 route("/drawing_example") {
                     DrawingExample(apiKey = apiKey)
                 }
+                route("/layer_example") {
+                    LayerExample(apiKey = apiKey)
+                }
             } else {
                 KeyRow(
                     apiKey = apiKey,
@@ -122,6 +125,9 @@ private fun Navigator() {
         }
         NavCard("Drawing Example") {
             router.navigate("/drawing_example")
+        }
+        NavCard("Layer Example") {
+            router.navigate("/layer_example")
         }
     }
 }
