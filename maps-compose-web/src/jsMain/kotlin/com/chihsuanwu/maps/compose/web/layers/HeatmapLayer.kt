@@ -15,8 +15,7 @@ import js.core.jso
 
 
 internal class HeatmapLayerNode(
-    val heatmapLayer: JsHeatmapLayer,
-    val map: MapView?,
+    val heatmapLayer: JsHeatmapLayer
 ) : MapNode {
     override fun onRemoved() {
         heatmapLayer.setMap(null)
@@ -59,7 +58,7 @@ fun HeatmapLayer(
                     this.radius = radius
                 }
             )
-            HeatmapLayerNode(layer, mapApplier?.map)
+            HeatmapLayerNode(layer)
         },
         update = {
             set(data) {

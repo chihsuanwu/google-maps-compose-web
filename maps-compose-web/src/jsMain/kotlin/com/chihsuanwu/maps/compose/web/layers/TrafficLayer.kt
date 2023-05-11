@@ -5,15 +5,13 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.MapApplier
 import com.chihsuanwu.maps.compose.web.MapNode
-import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import com.chihsuanwu.maps.compose.web.jsobject.layers.JsTrafficLayer
 import com.chihsuanwu.maps.compose.web.jsobject.layers.newTrafficLayer
 import js.core.jso
 
 
 internal class TrafficLayerNode(
-    val trafficLayer: JsTrafficLayer,
-    val map: MapView?,
+    val trafficLayer: JsTrafficLayer
 ) : MapNode {
     override fun onRemoved() {
         trafficLayer.setMap(null)
@@ -38,7 +36,7 @@ fun TrafficLayer(
                     this.map = mapApplier?.map
                 }
             )
-            TrafficLayerNode(layer, mapApplier?.map)
+            TrafficLayerNode(layer)
         },
         update = {
             set(autoRefresh) {

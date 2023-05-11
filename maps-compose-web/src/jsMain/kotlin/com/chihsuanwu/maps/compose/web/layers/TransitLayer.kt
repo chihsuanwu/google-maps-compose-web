@@ -5,14 +5,12 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.MapApplier
 import com.chihsuanwu.maps.compose.web.MapNode
-import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import com.chihsuanwu.maps.compose.web.jsobject.layers.JsTransitLayer
 import com.chihsuanwu.maps.compose.web.jsobject.layers.newTransitLayer
 
 
 internal class TransitLayerNode(
     val transitLayer: JsTransitLayer,
-    val map: MapView?,
 ) : MapNode {
     override fun onRemoved() {
         transitLayer.setMap(null)
@@ -30,7 +28,7 @@ fun TransitLayer() {
             val layer = newTransitLayer().apply {
                 setMap(mapApplier?.map)
             }
-            TransitLayerNode(layer, mapApplier?.map)
+            TransitLayerNode(layer)
         },
         update = {}
     )

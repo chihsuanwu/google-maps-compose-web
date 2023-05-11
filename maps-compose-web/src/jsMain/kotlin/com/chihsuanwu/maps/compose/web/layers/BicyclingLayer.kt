@@ -5,13 +5,11 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import com.chihsuanwu.maps.compose.web.MapApplier
 import com.chihsuanwu.maps.compose.web.MapNode
-import com.chihsuanwu.maps.compose.web.jsobject.MapView
 import com.chihsuanwu.maps.compose.web.jsobject.layers.JsBicyclingLayer
 import com.chihsuanwu.maps.compose.web.jsobject.layers.newBicyclingLayer
 
 internal class BicyclingLayerNode(
-    val bicyclingLayer: JsBicyclingLayer,
-    val map: MapView?,
+    val bicyclingLayer: JsBicyclingLayer
 ) : MapNode {
     override fun onRemoved() {
         bicyclingLayer.setMap(null)
@@ -29,7 +27,7 @@ fun BicyclingLayer() {
             val layer = newBicyclingLayer().apply {
                 setMap(mapApplier?.map)
             }
-            BicyclingLayerNode(layer, mapApplier?.map)
+            BicyclingLayerNode(layer)
         },
         update = {}
     )

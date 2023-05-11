@@ -37,7 +37,10 @@ fun LayerExample(apiKey: String) {
 //            ),
 //        )
         KMLLayer(
-            url = "http://api.flickr.com/services/feeds/geo/?g=322338@N20&lang=en-us&format=feed-georss"
+            url = "https://api.flickr.com/services/feeds/geo/?g=322338@N20&lang=en-us&format=feed-georss",
+            onClick = {
+                println("KMLLayer clicked, ${it.featureData.author.name}")
+            }
         )
     }
 }
