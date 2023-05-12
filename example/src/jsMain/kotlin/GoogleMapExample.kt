@@ -1,8 +1,5 @@
 import androidx.compose.runtime.*
 import com.chihsuanwu.maps.compose.web.*
-import com.chihsuanwu.maps.compose.web.layers.BicyclingLayer
-import com.chihsuanwu.maps.compose.web.layers.TrafficLayer
-import com.chihsuanwu.maps.compose.web.layers.TransitLayer
 import js.core.jso
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -33,12 +30,6 @@ private class MapListenerState {
     var zoomChanged: Int by mutableStateOf(0)
 }
 
-private class MapLayerState {
-    var bicyclingLayer: Boolean by mutableStateOf(false)
-    var trafficLayer: Boolean by mutableStateOf(false)
-    var transitLayer: Boolean by mutableStateOf(false)
-}
-
 private enum class MapStyle {
     Default,
     Night,
@@ -50,8 +41,6 @@ fun MapExample(
     apiKey: String,
 ) {
     val mapListenerState: MapListenerState by remember { mutableStateOf(MapListenerState()) }
-
-    val mapLayerState: MapLayerState by remember { mutableStateOf(MapLayerState()) }
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
@@ -88,7 +77,7 @@ fun MapExample(
 
     CameraRow(cameraPositionState)
 
-    MapLayerRow(mapLayerState)
+//    MapLayerRow(mapLayerState)
 
     MapStyleRow(mapStyle) {
         mapStyle = it
@@ -106,7 +95,6 @@ fun MapExample(
             mapOptions = mapOptions,
             cameraPositionState = cameraPositionState,
             listenerState = mapListenerState,
-            layerState = mapLayerState,
         )
 
         ListenerColumn(mapListenerState)
@@ -176,50 +164,11 @@ private fun MapStyleRow(
 }
 
 @Composable
-private fun MapLayerRow(
-    state: MapLayerState
-) {
-    Div({
-        style { margin(5.px) }
-    }) {
-        MapLayerToggleButton(
-            text = "BicyclingLayer",
-            state = state.bicyclingLayer,
-            onClick = { state.bicyclingLayer = !state.bicyclingLayer }
-        )
-        MapLayerToggleButton(
-            text = "TrafficLayer",
-            state = state.trafficLayer,
-            onClick = { state.trafficLayer = !state.trafficLayer }
-        )
-        MapLayerToggleButton(
-            text = "TransitLayer",
-            state = state.transitLayer,
-            onClick = { state.transitLayer = !state.transitLayer }
-        )
-    }
-}
-
-@Composable
-private fun MapLayerToggleButton(
-    text: String,
-    state: Boolean,
-    onClick: () -> Unit
-) {
-    Button({
-        onClick { onClick() }
-    }) {
-        Text("$text: $state")
-    }
-}
-
-@Composable
 private fun MapContent(
     apiKey: String,
     cameraPositionState: CameraPositionState,
     mapOptions: MapOptions,
     listenerState: MapListenerState,
-    layerState: MapLayerState,
 ) {
     GoogleMap(
         apiKey = apiKey,
@@ -249,17 +198,7 @@ private fun MapContent(
         onTilesLoaded = { listenerState.tilesLoaded++ },
         onTiltChanged = { listenerState.tiltChanged++ },
         onZoomChanged = { listenerState.zoomChanged++ },
-    ) {
-        if (layerState.bicyclingLayer) {
-            BicyclingLayer()
-        }
-        if (layerState.trafficLayer) {
-            TrafficLayer()
-        }
-        if (layerState.transitLayer) {
-            TransitLayer()
-        }
-    }
+    ) {}
 }
 
 @Composable

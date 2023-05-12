@@ -174,7 +174,7 @@ GoogleMap(
 }
 ```
 
-Currently, `TrafficLayer`, `TransitLayer`, and `BicyclingLayer` are supported.
+Currently, `TrafficLayer`, `TransitLayer`, `BicyclingLayer`, `HeatmapLayer` and `KmlLayer` are supported.
 
 </details>
 
