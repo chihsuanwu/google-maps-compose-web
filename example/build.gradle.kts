@@ -3,6 +3,10 @@ plugins {
     id("org.jetbrains.compose")
 }
 
+fun kotlinw(target: String): String = "org.jetbrains.kotlin-wrappers:kotlin-$target"
+
+val kotlinWrappersVersion = "1.0.0-pre.624"
+
 kotlin {
     js(IR) {
         browser {
@@ -20,6 +24,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
+                implementation(kotlinw("js"))
 
                 implementation(compose.html.core)
                 implementation(compose.runtime)
@@ -35,4 +40,8 @@ kotlin {
             }
         }
     }
+}
+
+dependencies {
+    "jsMainImplementation"(enforcedPlatform(kotlinw("wrappers-bom:$kotlinWrappersVersion")))
 }

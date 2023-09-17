@@ -9,7 +9,7 @@ group = "com.github.chihsuanwu"
 
 fun kotlinw(target: String): String = "org.jetbrains.kotlin-wrappers:kotlin-$target"
 
-val kotlinWrappersVersion = "1.0.0-pre.537"
+val kotlinWrappersVersion = "1.0.0-pre.624"
 
 kotlin {
     jvmToolchain(11)
